@@ -150,20 +150,32 @@
     <script src="app.js"></script>
     <script>
         // Sidebar toggle for mobile
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.toggle('open');
-            document.getElementById('sidebarOverlay').classList.toggle('active');
-        });
-        document.getElementById('sidebarOverlay').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.remove('open');
-            this.classList.remove('active');
-        });
-        document.getElementById('sidebarNav').addEventListener('click', function () {
-            if (window.innerWidth <= 768) {
-                document.getElementById('sidebar').classList.remove('open');
-                document.getElementById('sidebarOverlay').classList.remove('active');
+        (function () {
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.getElementById('sidebarOverlay');
+            var toggle = document.getElementById('sidebarToggle');
+            function openSidebar() {
+                sidebar.style.transform = 'translateX(0)';
+                sidebar.style.zIndex = '1000';
+                overlay.style.display = 'block';
             }
-        });
+            function closeSidebar() {
+                sidebar.style.transform = '';
+                sidebar.style.zIndex = '';
+                overlay.style.display = 'none';
+            }
+            toggle.addEventListener('click', function () {
+                if (overlay.style.display === 'block') {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            });
+            overlay.addEventListener('click', closeSidebar);
+            document.getElementById('sidebarNav').addEventListener('click', function () {
+                if (window.innerWidth <= 768) closeSidebar();
+            });
+        })();
     </script>
 </body>
 
