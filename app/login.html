@@ -601,57 +601,6 @@
                     </button>
                 </form>
 
-                <div class="divider">
-                    <span class="divider-text">Acceso rápido demo</span>
-                </div>
-
-                <div class="demo-accounts">
-                    <button class="demo-account-btn"
-                        onclick="loginAs('melky@wildtone.com','admin123','Melky Jaime','Super Admin','linear-gradient(135deg,#8b5cf6,#ec4899)','super_admin','MJ')">
-                        <div class="demo-avatar" style="background:linear-gradient(135deg,#8b5cf6,#ec4899)">MJ</div>
-                        <div class="demo-info">
-                            <span class="demo-name">Melky Jaime</span>
-                            <span class="demo-role">🟣 Director · Todos los módulos</span>
-                        </div>
-                        <span class="demo-arrow">→</span>
-                    </button>
-                    <button class="demo-account-btn"
-                        onclick="loginAs('deschamps@wildtone.com','ops123','Deschamps','A&amp;R Manager','linear-gradient(135deg,#3b82f6,#8b5cf6)','ar_sales','DE')">
-                        <div class="demo-avatar" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6)">DE</div>
-                        <div class="demo-info">
-                            <span class="demo-name">Deschamps</span>
-                            <span class="demo-role">🔵 A&amp;R · CRM, Pipeline, Demos</span>
-                        </div>
-                        <span class="demo-arrow">→</span>
-                    </button>
-                    <button class="demo-account-btn"
-                        onclick="loginAs('starling@wildtone.com','support123','Starling','Support Manager','linear-gradient(135deg,#f59e0b,#ef4444)','support_ops','ST')">
-                        <div class="demo-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">ST</div>
-                        <div class="demo-info">
-                            <span class="demo-name">Starling</span>
-                            <span class="demo-role">🟠 Soporte · Tickets, Lanzamientos</span>
-                        </div>
-                        <span class="demo-arrow">→</span>
-                    </button>
-                    <button class="demo-account-btn"
-                        onclick="loginAs('mariela@wildtone.com','finance123','Mariela','Finance Manager','linear-gradient(135deg,#10b981,#06b6d4)','finance','MA')">
-                        <div class="demo-avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4)">MA</div>
-                        <div class="demo-info">
-                            <span class="demo-name">Mariela</span>
-                            <span class="demo-role">🟢 Finanzas · Gastos, Royalties, Reportes</span>
-                        </div>
-                        <span class="demo-arrow">→</span>
-                    </button>
-                    <button class="demo-account-btn"
-                        onclick="loginAs('carlos@wildtone.com','director123','Carlos','Director de Proyectos','linear-gradient(135deg,#6366f1,#06b6d4)','project_director','CA')">
-                        <div class="demo-avatar" style="background:linear-gradient(135deg,#6366f1,#06b6d4)">CA</div>
-                        <div class="demo-info">
-                            <span class="demo-name">Carlos</span>
-                            <span class="demo-role">🟣 Dir. Proyectos · Todo menos Finanzas</span>
-                        </div>
-                        <span class="demo-arrow">→</span>
-                    </button>
-                </div>
             </div>
 
             <!-- RESET PASSWORD VIEW -->
@@ -694,11 +643,9 @@
 
         // Demo credentials (fallback)
         const USERS = [
-            { email: 'melky@wildtone.com', password: 'admin123', name: 'Melky Jaime', role: 'Super Admin', rbac: 'super_admin', initials: 'MJ' },
-            { email: 'deschamps@wildtone.com', password: 'ops123', name: 'Deschamps', role: 'A&R Manager', rbac: 'ar_sales', initials: 'DE' },
-            { email: 'starling@wildtone.com', password: 'support123', name: 'Starling', role: 'Support Manager', rbac: 'support_ops', initials: 'ST' },
-            { email: 'mariela@wildtone.com', password: 'finance123', name: 'Mariela', role: 'Finance Manager', rbac: 'finance', initials: 'MA' },
-            { email: 'carlos@wildtone.com', password: 'director123', name: 'Carlos', role: 'Director de Proyectos', rbac: 'project_director', initials: 'CA' },
+            { email: 'melkyjaime@wildtonemusicgroup.com', password: 'admin123', name: 'Melky Jaime', role: 'Director General', rbac: 'super_admin', initials: 'MJ' },
+            { email: 'mrdeschamps@wildtonemusicgroup.com', password: 'ops123', name: 'Deschamps', role: 'A&R Manager', rbac: 'ar_sales', initials: 'DE' },
+            { email: 'emy@wildtonemusicgroup.com', password: 'support123', name: 'Emy', role: 'Support Manager', rbac: 'support_ops', initials: 'EM' },
         ];
 
         function handleLogin(e) {
