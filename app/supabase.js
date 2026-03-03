@@ -5,7 +5,7 @@
 const SUPABASE_URL = 'https://spqhvzgfziilfoiekrkj.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwcWh2emdmemlpbGZvaWVrcmtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4NzgzMTYsImV4cCI6MjA4NzQ1NDMxNn0.HNW3kzM9po7beqZY6pL7wWDDM3qkhZZsOblwTfx_Jdc';
 
-const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+var _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ── Users ───────────────────────────────────
 async function dbGetUsers() {

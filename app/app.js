@@ -1962,15 +1962,33 @@ async function sendChatMessage() {
   if (!text) return;
   const user = getCurrentUser();
   const msgData = { sender_name: user.name, sender_initials: user.initials, text: text };
+  let channelLabel = '';
 
   if (chatCurrentChannel.startsWith('#')) {
     msgData.channel = chatCurrentChannel;
+    channelLabel = chatCurrentChannel;
   } else {
     const dmKey = [user.name, chatCurrentChannel].sort().join('::');
     msgData.channel = 'dm';
     msgData.dm_key = dmKey;
+    channelLabel = 'DM → ' + chatCurrentChannel;
   }
-  try { await _sb.from('chat_messages').insert(msgData); } catch (e) { console.error('Chat send error:', e); }
+
+  try {
+    const { error } = await _sb.from('chat_messages').insert(msgData);
+    if (error) throw error;
+
+    // Create notification for team
+    await _sb.from('notifications').insert({
+      text: '💬 ' + user.name + ' en ' + channelLabel + ': "' + text.substring(0, 40) + (text.length > 40 ? '...' : '') + '"',
+      time_label: 'ahora', unread: true, link: 'chat'
+    });
+
+    showToast('💬 Mensaje enviado');
+  } catch (e) {
+    console.error('Chat send error:', e);
+    showToast('❌ Error enviando mensaje');
+  }
   renderChat();
 }
 
