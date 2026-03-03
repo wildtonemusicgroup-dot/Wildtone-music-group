@@ -15,6 +15,9 @@
 </head>
 
 <body>
+    <!-- Sidebar overlay for mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-logo">
@@ -145,6 +148,23 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="supabase.js"></script>
     <script src="app.js"></script>
+    <script>
+        // Sidebar toggle for mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        });
+        document.getElementById('sidebarOverlay').addEventListener('click', function () {
+            document.getElementById('sidebar').classList.remove('open');
+            this.classList.remove('active');
+        });
+        document.getElementById('sidebarNav').addEventListener('click', function () {
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebarOverlay').classList.remove('active');
+            }
+        });
+    </script>
 </body>
 
 </html>

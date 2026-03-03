@@ -1454,9 +1454,33 @@ td:first-child {
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 998;
+    backdrop-filter: blur(2px);
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
 @media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+
     .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        z-index: 999;
         transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        width: var(--sidebar-w);
     }
 
     .sidebar.open {
@@ -1465,31 +1489,70 @@ td:first-child {
     }
 
     .main-wrapper {
-        margin-left: 0;
+        margin-left: 0 !important;
+        width: 100%;
     }
 
     .sidebar-toggle {
-        display: flex;
+        display: flex !important;
     }
 
     .main-content {
-        padding: 16px;
+        padding: 12px;
+    }
+
+    .topbar {
+        padding: 0 12px;
+    }
+
+    .topbar-title {
+        font-size: 16px;
     }
 
     .kpi-grid {
         grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .kpi-card {
+        padding: 14px;
+    }
+
+    .kpi-value {
+        font-size: 22px;
+    }
+
+    .section-title {
+        font-size: 16px;
     }
 
     .kanban-board {
         gap: 10px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 10px;
     }
 
     .kanban-col {
-        min-width: 220px;
+        min-width: 260px;
+    }
+
+    .card {
+        padding: 14px;
     }
 
     .clock-display {
         font-size: 36px;
+    }
+
+    .btn {
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+
+    .sidebar-user {
+        flex-wrap: wrap;
+        gap: 8px;
     }
 }
 
@@ -1500,6 +1563,31 @@ td:first-child {
 
     .quick-actions-grid {
         grid-template-columns: 1fr 1fr;
+    }
+
+    .topbar-actions {
+        gap: 6px;
+    }
+
+    .main-content {
+        padding: 8px;
+    }
+
+    .card {
+        padding: 12px;
+        border-radius: var(--r-sm);
+    }
+
+    .section-title {
+        font-size: 14px;
+    }
+
+    .kpi-value {
+        font-size: 20px;
+    }
+
+    .kpi-label {
+        font-size: 11px;
     }
 }
 
