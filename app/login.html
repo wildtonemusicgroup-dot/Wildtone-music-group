@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wildtone Operations Suite — Iniciar sesión</title>
+    <meta name="description" content="Accede a la plataforma de operaciones internas de Wildtone Music Group." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-base: #0a0b0f;
+            --bg-surface: #111318;
+            --bg-card: #161a22;
+            --border: rgba(255, 255, 255, 0.07);
+            --border-active: rgba(139, 92, 246, 0.5);
+            --brand: #8b5cf6;
+            --brand-light: #a78bfa;
+            --brand-dark: #6d28d9;
+            --brand-glow: rgba(139, 92, 246, 0.25);
+            --green: #10b981;
+            --red: #ef4444;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #475569;
+            --pink: #ec4899;
+            --r-sm: 8px;
+            --r-md: 12px;
+            --r-lg: 16px;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-base);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated background */
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: float 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .bg-orb-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--brand);
+            top: -150px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .bg-orb-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--pink);
+            bottom: -100px;
+            right: -80px;
+            animation-delay: -3s;
+        }
+
+        .bg-orb-3 {
+            width: 300px;
+            height: 300px;
+            background: #06b6d4;
+            top: 50%;
+            left: 60%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(20px, -20px) scale(1.05);
+            }
+
+            66% {
+                transform: translate(-15px, 15px) scale(0.95);
+            }
+        }
+
+        /* Grid pattern */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        /* Login card */
+        .login-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: rgba(22, 26, 34, 0.85);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px 36px;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(139, 92, 246, 0.1);
+            animation: cardIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Logo */
+        .login-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--brand), var(--pink));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 8px 20px var(--brand-glow);
+        }
+
+        .logo-text-wrap .logo-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+            display: block;
+        }
+
+        .logo-text-wrap .logo-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            display: block;
+        }
+
+        /* Heading */
+        .login-heading {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .login-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 7px;
+        }
+
+        .form-input-wrap {
+            position: relative;
+        }
+
+        .form-input-icon {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 15px;
+            pointer-events: none;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            color: var(--text-primary);
+            font-size: 14px;
+            padding: 11px 14px 11px 38px;
+            outline: none;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: var(--border-active);
+            background: rgba(139, 92, 246, 0.05);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 15px;
+            padding: 4px;
+            border-radius: 4px;
+            transition: color 0.15s;
+        }
+
+        .password-toggle:hover {
+            color: var(--text-secondary);
+        }
+
+        /* Remember + forgot */
+        .form-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-secondary);
+            user-select: none;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 15px;
+            height: 15px;
+            accent-color: var(--brand);
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            font-size: 13px;
+            color: var(--brand-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.15s;
+        }
+
+        .forgot-link:hover {
+            color: white;
+        }
+
+        /* Submit button */
+        .btn-login {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+            border: none;
+            border-radius: var(--r-sm);
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            letter-spacing: 0.3px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 16px var(--brand-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-login::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px var(--brand-glow);
+        }
+
+        .btn-login:hover::before {
+            opacity: 1;
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        .btn-login.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .divider-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        /* Demo accounts */
+        .demo-accounts {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .demo-account-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.18s;
+            text-align: left;
+            width: 100%;
+        }
+
+        .demo-account-btn:hover {
+            background: rgba(139, 92, 246, 0.08);
+            border-color: rgba(139, 92, 246, 0.25);
+        }
+
+        .demo-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .demo-info {
+            flex: 1;
+        }
+
+        .demo-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: block;
+        }
+
+        .demo-role {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        .demo-arrow {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Error message */
+        .error-msg {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-radius: var(--r-sm);
+            padding: 10px 14px;
+            font-size: 13px;
+            color: #fca5a5;
+            margin-bottom: 16px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .error-msg.show {
+            display: flex;
+        }
+
+        /* Footer */
+        .login-footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Reset view */
+        #resetView {
+            display: none;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--brand-light);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+            margin-bottom: 20px;
+            padding: 0;
+            transition: color 0.15s;
+        }
+
+        .back-link:hover {
+            color: white;
+        }
+
+        /* Success state */
+        .success-msg {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: var(--r-sm);
+            padding: 10px 14px;
+            font-size: 13px;
+            color: #6ee7b7;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .success-msg.show {
+            display: flex;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 28px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+    <div class="bg-grid"></div>
+
+    <div class="login-wrapper">
+        <div class="login-card">
+
+            <!-- Logo -->
+            <div class="login-logo">
+                <div class="logo-icon"><svg viewBox="0 0 40 40" width="26" height="26" fill="none" stroke="white"
+                        stroke-width="2.8" stroke-linecap="round">
+                        <line x1="8" y1="32" x2="16" y2="4" />
+                        <line x1="14" y1="32" x2="22" y2="4" />
+                        <line x1="20" y1="32" x2="28" y2="4" />
+                        <line x1="12" y1="36" x2="20" y2="18" />
+                        <line x1="18" y1="36" x2="26" y2="18" />
+                    </svg></div>
+                <div class="logo-text-wrap">
+                    <span class="logo-title">Wildtone</span>
+                    <span class="logo-sub">Operations Suite</span>
+                </div>
+            </div>
+
+            <!-- LOGIN VIEW -->
+            <div id="loginView">
+                <h1 class="login-heading">Bienvenido de vuelta</h1>
+                <p class="login-sub">Ingresa tus credenciales para continuar</p>
+
+                <div class="error-msg" id="errorMsg">
+                    <span>⚠</span>
+                    <span id="errorText">Credenciales incorrectas. Intenta de nuevo.</span>
+                </div>
+
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="email">Correo electrónico</label>
+                        <div class="form-input-wrap">
+                            <span class="form-input-icon">✉</span>
+                            <input class="form-input" type="email" id="email" placeholder="tu@wildtone.com"
+                                autocomplete="email" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">Contraseña</label>
+                        <div class="form-input-wrap">
+                            <span class="form-input-icon">🔒</span>
+                            <input class="form-input" type="password" id="password" placeholder="••••••••"
+                                autocomplete="current-password" required />
+                            <button type="button" class="password-toggle" id="pwToggle" onclick="togglePassword()"
+                                title="Mostrar contraseña">👁</button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="remember" />
+                            Recordarme
+                        </label>
+                        <a href="#" class="forgot-link" onclick="showReset(event)">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <button type="submit" class="btn-login" id="loginBtn">
+                        Iniciar sesión
+                    </button>
+                </form>
+
+                <div class="divider">
+                    <span class="divider-text">Acceso rápido demo</span>
+                </div>
+
+                <div class="demo-accounts">
+                    <button class="demo-account-btn"
+                        onclick="loginAs('melky@wildtone.com','admin123','Melky Jaime','Super Admin','linear-gradient(135deg,#8b5cf6,#ec4899)','super_admin','MJ')">
+                        <div class="demo-avatar" style="background:linear-gradient(135deg,#8b5cf6,#ec4899)">MJ</div>
+                        <div class="demo-info">
+                            <span class="demo-name">Melky Jaime</span>
+                            <span class="demo-role">🟣 Director · Todos los módulos</span>
+                        </div>
+                        <span class="demo-arrow">→</span>
+                    </button>
+                    <button class="demo-account-btn"
+                        onclick="loginAs('deschamps@wildtone.com','ops123','Deschamps','A&amp;R Manager','linear-gradient(135deg,#3b82f6,#8b5cf6)','ar_sales','DE')">
+                        <div class="demo-avatar" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6)">DE</div>
+                        <div class="demo-info">
+                            <span class="demo-name">Deschamps</span>
+                            <span class="demo-role">🔵 A&amp;R · CRM, Pipeline, Demos</span>
+                        </div>
+                        <span class="demo-arrow">→</span>
+                    </button>
+                    <button class="demo-account-btn"
+                        onclick="loginAs('starling@wildtone.com','support123','Starling','Support Manager','linear-gradient(135deg,#f59e0b,#ef4444)','support_ops','ST')">
+                        <div class="demo-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">ST</div>
+                        <div class="demo-info">
+                            <span class="demo-name">Starling</span>
+                            <span class="demo-role">🟠 Soporte · Tickets, Lanzamientos</span>
+                        </div>
+                        <span class="demo-arrow">→</span>
+                    </button>
+                    <button class="demo-account-btn"
+                        onclick="loginAs('mariela@wildtone.com','finance123','Mariela','Finance Manager','linear-gradient(135deg,#10b981,#06b6d4)','finance','MA')">
+                        <div class="demo-avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4)">MA</div>
+                        <div class="demo-info">
+                            <span class="demo-name">Mariela</span>
+                            <span class="demo-role">🟢 Finanzas · Gastos, Royalties, Reportes</span>
+                        </div>
+                        <span class="demo-arrow">→</span>
+                    </button>
+                    <button class="demo-account-btn"
+                        onclick="loginAs('carlos@wildtone.com','director123','Carlos','Director de Proyectos','linear-gradient(135deg,#6366f1,#06b6d4)','project_director','CA')">
+                        <div class="demo-avatar" style="background:linear-gradient(135deg,#6366f1,#06b6d4)">CA</div>
+                        <div class="demo-info">
+                            <span class="demo-name">Carlos</span>
+                            <span class="demo-role">🟣 Dir. Proyectos · Todo menos Finanzas</span>
+                        </div>
+                        <span class="demo-arrow">→</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- RESET PASSWORD VIEW -->
+            <div id="resetView">
+                <button class="back-link" onclick="showLogin()">← Volver al login</button>
+                <h2 class="login-heading">Recuperar contraseña</h2>
+                <p class="login-sub">Te enviaremos un enlace para restablecer tu contraseña.</p>
+
+                <div class="success-msg" id="resetSuccess">
+                    <span>✅</span>
+                    <span>Enlace enviado. Revisa tu correo electrónico.</span>
+                </div>
+
+                <form id="resetForm" onsubmit="handleReset(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="resetEmail">Correo electrónico</label>
+                        <div class="form-input-wrap">
+                            <span class="form-input-icon">✉</span>
+                            <input class="form-input" type="email" id="resetEmail" placeholder="tu@wildtone.com"
+                                required />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-login" id="resetBtn">
+                        Enviar enlace de recuperación
+                    </button>
+                </form>
+            </div>
+
+            <div class="login-footer">
+                © 2026 Wildtone Music Group · Todos los derechos reservados
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script>
+        const SUPABASE_URL = 'https://spqhvzgfziilfoiekrkj.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwcWh2emdmemlpbGZvaWVrcmtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4NzgzMTYsImV4cCI6MjA4NzQ1NDMxNn0.HNW3kzM9po7beqZY6pL7wWDDM3qkhZZsOblwTfx_Jdc';
+        const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Demo credentials (fallback)
+        const USERS = [
+            { email: 'melky@wildtone.com', password: 'admin123', name: 'Melky Jaime', role: 'Super Admin', rbac: 'super_admin', initials: 'MJ' },
+            { email: 'deschamps@wildtone.com', password: 'ops123', name: 'Deschamps', role: 'A&R Manager', rbac: 'ar_sales', initials: 'DE' },
+            { email: 'starling@wildtone.com', password: 'support123', name: 'Starling', role: 'Support Manager', rbac: 'support_ops', initials: 'ST' },
+            { email: 'mariela@wildtone.com', password: 'finance123', name: 'Mariela', role: 'Finance Manager', rbac: 'finance', initials: 'MA' },
+            { email: 'carlos@wildtone.com', password: 'director123', name: 'Carlos', role: 'Director de Proyectos', rbac: 'project_director', initials: 'CA' },
+        ];
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('loginBtn');
+            const errorEl = document.getElementById('errorMsg');
+
+            // Loading state
+            btn.classList.add('loading');
+            btn.innerHTML = '<span class="spinner"></span>Verificando...';
+            errorEl.classList.remove('show');
+
+            setTimeout(() => {
+                const user = USERS.find(u => u.email === email && u.password === password);
+                if (user) {
+                    localStorage.setItem('wildtone_user', JSON.stringify({ name: user.name, role: user.role, rbac: user.rbac, initials: user.initials, email: user.email }));
+                    btn.innerHTML = '✅ Acceso concedido — redirigiendo...';
+                    btn.style.background = 'linear-gradient(135deg,#10b981,#059669)';
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 800);
+                } else {
+                    btn.classList.remove('loading');
+                    btn.innerHTML = 'Iniciar sesión';
+                    errorEl.classList.add('show');
+                    document.getElementById('errorText').textContent = 'Correo o contraseña incorrectos. Intenta de nuevo.';
+                    document.getElementById('password').value = '';
+                    document.getElementById('password').focus();
+                }
+            }, 1000);
+        }
+
+        function loginAs(email, password, name, role, gradient, rbac, initials) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            document.getElementById('errorMsg').classList.remove('show');
+
+            const btn = document.getElementById('loginBtn');
+            btn.classList.add('loading');
+            btn.innerHTML = `<span class="spinner"></span>Entrando como ${name}...`;
+
+            setTimeout(() => {
+                localStorage.setItem('wildtone_user', JSON.stringify({ name, role, rbac, initials, email }));
+                btn.innerHTML = `✅ Bienvenido, ${name.split(' ')[0]}!`;
+                btn.style.background = gradient;
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 700);
+            }, 900);
+        }
+
+        function togglePassword() {
+            const input = document.getElementById('password');
+            const btn = document.getElementById('pwToggle');
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁';
+            }
+        }
+
+        function showReset(e) {
+            e.preventDefault();
+            document.getElementById('loginView').style.display = 'none';
+            document.getElementById('resetView').style.display = 'block';
+            document.getElementById('resetEmail').focus();
+        }
+
+        function showLogin() {
+            document.getElementById('loginView').style.display = 'block';
+            document.getElementById('resetView').style.display = 'none';
+            document.getElementById('resetSuccess').classList.remove('show');
+        }
+
+        function handleReset(e) {
+            e.preventDefault();
+            const btn = document.getElementById('resetBtn');
+            btn.classList.add('loading');
+            btn.innerHTML = '<span class="spinner"></span>Enviando...';
+
+            setTimeout(() => {
+                btn.classList.remove('loading');
+                btn.innerHTML = 'Enviar enlace de recuperación';
+                document.getElementById('resetSuccess').classList.add('show');
+                document.getElementById('resetForm').reset();
+            }, 1200);
+        }
+
+        // Auto-focus email on load
+        window.addEventListener('load', () => {
+            document.getElementById('email').focus();
+        });
+    </script>
+</body>
+
+</html>

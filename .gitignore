@@ -1,0 +1,18 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+
+# Gemini/AI workspace
+.gemini/

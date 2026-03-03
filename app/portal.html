@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wildtone — Portal de Soporte</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --bg: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-surface: #1a1a26;
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #e5e5f0;
+            --text-muted: #6b6b80;
+            --text-secondary: #a0a0b8;
+            --brand: #7c3aed;
+            --brand-light: #a78bfa;
+            --green: #22c55e;
+            --blue: #3b82f6;
+            --yellow: #eab308;
+            --red: #ef4444;
+            --r-sm: 8px;
+            --r-md: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .portal-header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .portal-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .portal-logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--brand), #06b6d4);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .portal-logo h1 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .portal-logo span {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        .portal-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .portal-user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* Container */
+        .portal-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Login Form */
+        .portal-login {
+            max-width: 420px;
+            margin: 80px auto;
+            text-align: center;
+        }
+
+        .portal-login h2 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .portal-login p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            color: var(--text);
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--brand);
+        }
+
+        .form-textarea {
+            resize: vertical;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: var(--r-sm);
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--brand);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #6d28d9;
+        }
+
+        .btn-secondary {
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--brand);
+            color: var(--text);
+        }
+
+        .btn-green {
+            background: var(--green);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        /* Ticket list */
+        .ticket-item {
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            padding: 16px;
+            margin-bottom: 12px;
+            background: var(--bg-card);
+            cursor: pointer;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .ticket-item:hover {
+            border-color: var(--brand);
+            transform: translateY(-1px);
+        }
+
+        .ticket-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .ticket-id {
+            font-size: 12px;
+            color: var(--brand-light);
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-green {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--green);
+        }
+
+        .badge-yellow {
+            background: rgba(234, 179, 8, 0.15);
+            color: var(--yellow);
+        }
+
+        .badge-red {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--red);
+        }
+
+        .badge-blue {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--blue);
+        }
+
+        .badge-purple {
+            background: rgba(124, 58, 237, 0.15);
+            color: var(--brand-light);
+        }
+
+        .ticket-subject {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .ticket-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Messages */
+        .message {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+            color: white;
+        }
+
+        .message-bubble {
+            flex: 1;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            padding: 12px;
+        }
+
+        .message-author {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .message-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Status colors */
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: var(--r-sm);
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--brand);
+            border-color: var(--brand);
+            color: white;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .section-sub {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 12px 20px;
+            border-radius: var(--r-sm);
+            font-size: 13px;
+            color: var(--text);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .back-link {
+            background: none;
+            border: none;
+            color: var(--brand-light);
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .back-link:hover {
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px;
+            color: var(--text-muted);
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="portal-header">
+        <div class="portal-logo">
+            <div class="portal-logo-icon">W</div>
+            <div>
+                <h1>Wildtone Soporte</h1>
+                <span>Portal de clientes</span>
+            </div>
+        </div>
+        <div id="headerUser" style="display:none">
+            <div class="portal-user">
+                <span id="headerUserName"></span>
+                <div class="portal-user-avatar" id="headerUserAvatar">?</div>
+                <button class="btn btn-sm btn-secondary" onclick="portalLogout()">Salir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN VIEW -->
+    <div id="loginView">
+        <div class="portal-login">
+            <div style="font-size:48px;margin-bottom:16px">🎫</div>
+            <h2>Portal de Soporte</h2>
+            <p>Ingresa tu nombre y correo para ver tus tickets o crear uno nuevo</p>
+            <div class="form-group">
+                <label>Nombre completo</label>
+                <input type="text" class="form-input" id="clientName" placeholder="Ej: Luna Roja">
+            </div>
+            <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" class="form-input" id="clientEmail" placeholder="Ej: lunaroja@gmail.com">
+            </div>
+            <button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="portalLogin()">Ingresar al
+                portal</button>
+            <div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--border)">
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">Prueba rápida con un cliente demo:
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">
+                    <button class="btn btn-sm btn-secondary"
+                        onclick="demoLogin('Artista Luna Roja','lunaroja@gmail.com')">🎤 Luna Roja</button>
+                    <button class="btn btn-sm btn-secondary"
+                        onclick="demoLogin('Manager DJ Voltex','voltex.mgmt@gmail.com')">🎧 DJ Voltex</button>
+                    <button class="btn btn-sm btn-secondary"
+                        onclick="demoLogin('Artista Sofía Montero','sofia.montero.music@gmail.com')">🎵 Sofía
+                        Montero</button>
+                    <button class="btn btn-sm btn-secondary"
+                        onclick="demoLogin('Productor Beats MX','beatsmx.prod@gmail.com')">🎹 Beats MX</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TICKETS VIEW -->
+    <div id="ticketsView" style="display:none">
+        <div class="portal-container">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+                <div>
+                    <div class="section-title">Mis Tickets</div>
+                    <div class="section-sub" style="margin-bottom:0" id="ticketCount">—</div>
+                </div>
+                <button class="btn btn-primary" onclick="showNewTicketForm()">+ Nuevo Ticket</button>
+            </div>
+            <div id="ticketList"></div>
+        </div>
+    </div>
+
+    <!-- NEW TICKET VIEW -->
+    <div id="newTicketView" style="display:none">
+        <div class="portal-container">
+            <button class="back-link" onclick="showTickets()">← Volver a mis tickets</button>
+            <div class="card">
+                <div class="section-title" style="margin-bottom:16px">📝 Crear Nuevo Ticket</div>
+                <div class="form-group">
+                    <label>Asunto *</label>
+                    <input type="text" class="form-input" id="newTicketSubject"
+                        placeholder="Describe brevemente tu problema">
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select class="form-select" id="newTicketCategory">
+                        <option value="Acceso">🔐 Acceso / Cuenta</option>
+                        <option value="Finanzas">💰 Pagos / Regalías</option>
+                        <option value="Reportes">📊 Reportes / Streams</option>
+                        <option value="Catálogo">📀 Catálogo / Distribución</option>
+                        <option value="Producción">🎵 Producción</option>
+                        <option value="Otro">📋 Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Prioridad</label>
+                    <select class="form-select" id="newTicketPriority">
+                        <option value="Baja">Baja</option>
+                        <option value="Media" selected>Media</option>
+                        <option value="Alta">Alta</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Descripción del problema *</label>
+                    <textarea class="form-textarea" id="newTicketMessage" rows="5"
+                        placeholder="Explica tu problema con el mayor detalle posible..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="submitNewTicket()">📤 Enviar Ticket</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TICKET DETAIL VIEW -->
+    <div id="ticketDetailView" style="display:none">
+        <div class="portal-container" id="ticketDetail"></div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script>
+        const SUPABASE_URL = 'https://spqhvzgfziilfoiekrkj.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwcWh2emdmemlpbGZvaWVrcmtqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4NzgzMTYsImV4cCI6MjA4NzQ1NDMxNn0.HNW3kzM9po7beqZY6pL7wWDDM3qkhZZsOblwTfx_Jdc';
+        const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let clientUser = null;
+
+        // Load tickets from Supabase (with localStorage fallback)
+        async function loadData() {
+            try {
+                const { data: tickets, error } = await _sb.from('tickets').select('*').order('created_at', { ascending: false });
+                if (error) throw error;
+                for (const t of tickets) {
+                    const { data: msgs } = await _sb.from('ticket_messages').select('*').eq('ticket_id', t.id).order('created_at');
+                    t.messages = (msgs || []).map(m => ({ role: m.role, text: m.text, time: m.msg_time, author: m.author }));
+                    t.from = t.from_name; t.date = t.ticket_date; t.lastReply = t.last_reply;
+                    t.assignedTo = t.assigned_dept; t.assignedUser = t.assigned_user;
+                }
+                return { tickets };
+            } catch (e) {
+                console.warn('Supabase fallback:', e);
+                try { const s = JSON.parse(localStorage.getItem('wildtone_data')); return s && s.tickets ? s : null; } catch (e2) { return null; }
+            }
+        }
+
+        function savePortalData(data) { /* no-op: Supabase is source of truth */ }
+
+        function showToast(text) {
+            const t = document.getElementById('toast');
+            t.textContent = text;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2500);
+        }
+
+        // Login
+        function portalLogin() {
+            const name = document.getElementById('clientName').value.trim();
+            const email = document.getElementById('clientEmail').value.trim();
+            if (!name || !email) {
+                if (!name) document.getElementById('clientName').style.borderColor = 'var(--red)';
+                if (!email) document.getElementById('clientEmail').style.borderColor = 'var(--red)';
+                return;
+            }
+            clientUser = { name, email, initials: name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() };
+            localStorage.setItem('wildtone_portal_user', JSON.stringify(clientUser));
+            enterPortal();
+        }
+
+        function demoLogin(name, email) {
+            document.getElementById('clientName').value = name;
+            document.getElementById('clientEmail').value = email;
+            portalLogin();
+        }
+
+        function portalLogout() {
+            localStorage.removeItem('wildtone_portal_user');
+            clientUser = null;
+            document.getElementById('loginView').style.display = '';
+            document.getElementById('ticketsView').style.display = 'none';
+            document.getElementById('newTicketView').style.display = 'none';
+            document.getElementById('ticketDetailView').style.display = 'none';
+            document.getElementById('headerUser').style.display = 'none';
+        }
+
+        function enterPortal() {
+            document.getElementById('loginView').style.display = 'none';
+            document.getElementById('headerUser').style.display = '';
+            document.getElementById('headerUserName').textContent = clientUser.name;
+            document.getElementById('headerUserAvatar').textContent = clientUser.initials;
+            showTickets();
+        }
+
+        // Tickets
+        function showTickets() {
+            document.getElementById('ticketsView').style.display = '';
+            document.getElementById('newTicketView').style.display = 'none';
+            document.getElementById('ticketDetailView').style.display = 'none';
+            renderTickets();
+        }
+
+        async function renderTickets() {
+            const data = await loadData();
+            if (!data) {
+                document.getElementById('ticketList').innerHTML = '<div class="empty-state"><div class="icon">📭</div><div>No hay datos disponibles. Asegúrate de que la app Wildtone esté configurada.</div></div>';
+                return;
+            }
+            const myTickets = data.tickets.filter(t => t.email === clientUser.email);
+            document.getElementById('ticketCount').textContent = myTickets.length + ' tickets';
+
+            if (!myTickets.length) {
+                document.getElementById('ticketList').innerHTML = '<div class="empty-state"><div class="icon">🎉</div><div>No tienes tickets abiertos. ¡Todo está bien!</div></div>';
+                return;
+            }
+
+            document.getElementById('ticketList').innerHTML = myTickets.map(t => {
+                const statusColor = { 'Abierto': 'red', 'En proceso': 'blue', 'En espera': 'yellow', 'Resuelto': 'green' }[t.status] || 'purple';
+                return `
+                    <div class="ticket-item" onclick="viewTicketDetail('${t.id}')">
+                        <div class="ticket-item-header">
+                            <span class="ticket-id">${t.id}</span>
+                            <span class="badge badge-${statusColor}">${t.status}</span>
+                        </div>
+                        <div class="ticket-subject">${t.subject}</div>
+                        <div class="ticket-meta">
+                            📁 ${t.category} · 📅 ${t.date} · ${t.messages.length} mensaje${t.messages.length > 1 ? 's' : ''}
+                            ${t.assignedTo ? ' · Asignado a: ' + t.assignedTo : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // New Ticket
+        function showNewTicketForm() {
+            document.getElementById('ticketsView').style.display = 'none';
+            document.getElementById('newTicketView').style.display = '';
+        }
+
+        async function submitNewTicket() {
+            const subject = document.getElementById('newTicketSubject').value.trim();
+            const message = document.getElementById('newTicketMessage').value.trim();
+            if (!subject || !message) {
+                if (!subject) document.getElementById('newTicketSubject').style.borderColor = 'var(--red)';
+                if (!message) document.getElementById('newTicketMessage').style.borderColor = 'var(--red)';
+                return;
+            }
+            const category = document.getElementById('newTicketCategory').value;
+            const priority = document.getElementById('newTicketPriority').value;
+
+            const { count } = await _sb.from('tickets').select('*', { count: 'exact', head: true });
+            const newId = 'TK-' + String((count || 0) + 1).padStart(3, '0');
+            const now = new Date().toISOString().slice(0, 10);
+            const nowFull = new Date().toISOString().slice(0, 16).replace('T', ' ');
+
+            const { error: tErr } = await _sb.from('tickets').insert({
+                id: newId, subject, from_name: clientUser.name, email: clientUser.email,
+                status: 'Abierto', priority, category, ticket_date: now
+            });
+            if (tErr) { showToast('❌ Error al crear ticket'); console.error(tErr); return; }
+
+            await _sb.from('ticket_messages').insert({ ticket_id: newId, role: 'client', text: message, msg_time: nowFull });
+
+            await _sb.from('notifications').insert({
+                text: '🆕 Nuevo ticket ' + newId + ' de ' + clientUser.name + ': "' + subject.substring(0, 35) + '..."',
+                time_label: 'ahora', unread: true, link: 'support', ticket_id: newId
+            });
+
+            showToast('✅ Ticket ' + newId + ' creado exitosamente');
+            document.getElementById('newTicketSubject').value = '';
+            document.getElementById('newTicketMessage').value = '';
+            showTickets();
+        }
+
+        // Ticket Detail
+        async function viewTicketDetail(id) {
+            const data = await loadData();
+            if (!data) return;
+            const ticket = data.tickets.find(t => t.id === id);
+            if (!ticket) return;
+
+            document.getElementById('ticketsView').style.display = 'none';
+            document.getElementById('ticketDetailView').style.display = '';
+            const statusColor = { 'Abierto': 'red', 'En proceso': 'blue', 'En espera': 'yellow', 'Resuelto': 'green' }[ticket.status] || 'purple';
+
+            document.getElementById('ticketDetail').innerHTML = `
+                <button class="back-link" onclick="showTickets()">← Volver a mis tickets</button>
+                <div class="card">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+                        <div>
+                            <div style="font-size:12px;color:var(--brand-light);font-weight:600;margin-bottom:4px">${ticket.id} · ${ticket.category}</div>
+                            <div style="font-size:18px;font-weight:700">${ticket.subject}</div>
+                        </div>
+                        <span class="badge badge-${statusColor}" style="font-size:12px;padding:4px 12px">${ticket.status}</span>
+                    </div>
+                    <div style="font-size:12px;color:var(--text-muted);margin-bottom:20px;display:flex;gap:16px;flex-wrap:wrap">
+                        <span>📅 Creado: ${ticket.date}</span>
+                        <span>🔔 Prioridad: ${ticket.priority}</span>
+                        ${ticket.assignedTo ? '<span>👤 Asignado: ' + ticket.assignedTo + ' (' + (ticket.assignedUser || '') + ')</span>' : '<span>⏳ Pendiente de asignación</span>'}
+                    </div>
+                    <div style="border-top:1px solid var(--border);padding-top:16px">
+                        <div style="font-size:13px;font-weight:600;margin-bottom:12px">Conversación (${ticket.messages.length} mensajes)</div>
+                        ${ticket.messages.map(m => `
+                            <div class="message">
+                                <div class="message-avatar" style="background:${m.role === 'client' ? 'var(--blue)' : 'var(--green)'}">
+                                    ${m.role === 'client' ? '👤' : '🛡'}
+                                </div>
+                                <div class="message-bubble">
+                                    <div class="message-author">${m.role === 'client' ? ticket.from : 'Equipo Wildtone' + (m.author ? ' (' + m.author + ')' : '')} · ${m.time}</div>
+                                    <div class="message-text">${m.text}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ${ticket.status !== 'Resuelto' ? `
+                        <div style="border-top:1px solid var(--border);padding-top:16px;margin-top:16px">
+                            <div style="font-size:13px;font-weight:600;margin-bottom:8px">💬 Enviar respuesta</div>
+                            <textarea class="form-textarea" id="clientReplyText" rows="3" placeholder="Escribe tu respuesta..."></textarea>
+                            <button class="btn btn-primary" style="margin-top:8px" onclick="sendClientReply('${ticket.id}')">📤 Enviar</button>
+                        </div>
+                    ` : '<div style="text-align:center;padding:16px;color:var(--green);font-size:13px;margin-top:16px;border-top:1px solid var(--border)">✅ Este ticket ha sido resuelto</div>'}
+                </div>
+            `;
+        }
+
+        async function sendClientReply(id) {
+            const text = document.getElementById('clientReplyText').value.trim();
+            if (!text) {
+                document.getElementById('clientReplyText').style.borderColor = 'var(--red)';
+                return;
+            }
+            const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+
+            await _sb.from('ticket_messages').insert({ ticket_id: id, role: 'client', text, msg_time: now });
+
+            const updates = { last_reply: now };
+            const { data: tk } = await _sb.from('tickets').select('status').eq('id', id).single();
+            if (tk && tk.status === 'En espera') updates.status = 'Abierto';
+            await _sb.from('tickets').update(updates).eq('id', id);
+
+            await _sb.from('notifications').insert({
+                text: '💬 ' + clientUser.name + ' respondió al ticket ' + id + ': "' + text.substring(0, 35) + '..."',
+                time_label: 'ahora', unread: true, link: 'support', ticket_id: id
+            });
+
+            showToast('💬 Respuesta enviada');
+            viewTicketDetail(id);
+        }
+
+        // Init
+        try {
+            const saved = JSON.parse(localStorage.getItem('wildtone_portal_user'));
+            if (saved && saved.name && saved.email) {
+                clientUser = saved;
+                enterPortal();
+            }
+        } catch (e) { }
+    </script>
+</body>
+
+</html>
