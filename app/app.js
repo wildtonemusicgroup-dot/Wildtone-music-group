@@ -1840,7 +1840,7 @@ async function getChatData() {
     chatData.channels[key] = { ...info, messages: [] };
   }
   try {
-    const { data: msgs, error } = await supabase.from('chat_messages').select('*').order('created_at');
+    const { data: msgs, error } = await _sb.from('chat_messages').select('*').order('created_at');
     if (error) throw error;
     for (const m of (msgs || [])) {
       const msg = { user: m.sender_name, initials: m.sender_initials, text: m.text, time: m.created_at ? new Date(m.created_at).toISOString().slice(0, 16).replace('T', ' ') : '' };
@@ -1970,7 +1970,7 @@ async function sendChatMessage() {
     msgData.channel = 'dm';
     msgData.dm_key = dmKey;
   }
-  try { await supabase.from('chat_messages').insert(msgData); } catch (e) { console.error('Chat send error:', e); }
+  try { await _sb.from('chat_messages').insert(msgData); } catch (e) { console.error('Chat send error:', e); }
   renderChat();
 }
 
