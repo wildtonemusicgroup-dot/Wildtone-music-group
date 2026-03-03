@@ -1974,9 +1974,15 @@ async function sendChatMessage() {
     channelLabel = 'DM → ' + chatCurrentChannel;
   }
 
+  console.log('📤 Sending chat msg:', JSON.stringify(msgData));
   try {
-    const { error } = await _sb.from('chat_messages').insert(msgData);
-    if (error) throw error;
+    const { data, error } = await _sb.from('chat_messages').insert(msgData).select();
+    console.log('📤 Insert result:', { data, error });
+    if (error) {
+      console.error('Chat insert error detail:', error.code, error.message, error.details, error.hint);
+      showToast('❌ Error: ' + (error.message || 'desconocido'));
+      return;
+    }
 
     // Create notification for team
     await _sb.from('notifications').insert({
@@ -1986,8 +1992,8 @@ async function sendChatMessage() {
 
     showToast('💬 Mensaje enviado');
   } catch (e) {
-    console.error('Chat send error:', e);
-    showToast('❌ Error enviando mensaje');
+    console.error('Chat send exception:', e);
+    showToast('❌ Error: ' + e.message);
   }
   renderChat();
 }
