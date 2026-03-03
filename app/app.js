@@ -1825,77 +1825,46 @@ function scrollChat() {
 // ── Chat Interno ─────────────────────────────────────────────
 let chatCurrentChannel = '#general';
 
-function getChatData() {
+const CHAT_CHANNELS = {
+  '#general': { name: 'General', icon: '🏢', desc: 'Canal para todo el equipo' },
+  '#soporte': { name: 'Soporte', icon: '🎫', desc: 'Canal del equipo de soporte' },
+  '#finanzas': { name: 'Finanzas', icon: '💰', desc: 'Canal del equipo de finanzas' },
+  '#ar-ventas': { name: 'A&R / Ventas', icon: '🎵', desc: 'Canal de A&R y ventas' },
+  '#proyectos': { name: 'Proyectos', icon: '📋', desc: 'Canal de gestión de proyectos' },
+  '#produccion': { name: 'Producción', icon: '🎧', desc: 'Canal de producción musical' }
+};
+
+async function getChatData() {
+  const chatData = { channels: {}, dms: {} };
+  for (const [key, info] of Object.entries(CHAT_CHANNELS)) {
+    chatData.channels[key] = { ...info, messages: [] };
+  }
   try {
-    const saved = JSON.parse(localStorage.getItem('wildtone_chat'));
-    if (saved && saved.channels) return saved;
-  } catch (e) { }
-  const defaultChat = {
-    channels: {
-      '#general': {
-        name: 'General', icon: '🏢', desc: 'Canal para todo el equipo',
-        messages: [
-          { user: 'Melky Jaime', initials: 'MJ', text: 'Buenos días equipo 👋 Recuerden que el viernes entregamos el EP.', time: '2026-02-20 09:00' },
-          { user: 'Mariela', initials: 'MA', text: 'Listo, ya tengo los costos actualizados para la reunión.', time: '2026-02-20 09:15' },
-          { user: 'Deschamps', initials: 'DE', text: 'Perfecto. Yo ya terminé de revisar los demos nuevos.', time: '2026-02-20 09:20' },
-          { user: 'Starling', initials: 'ST', text: 'Los tickets de hoy ya están clasificados 🎫', time: '2026-02-20 09:30' },
-          { user: 'Carlos', initials: 'CA', text: 'Confirmo que el timeline del proyecto está al día ✅', time: '2026-02-20 10:00' },
-        ]
-      },
-      '#soporte': {
-        name: 'Soporte', icon: '🎫', desc: 'Canal del equipo de soporte',
-        messages: [
-          { user: 'Starling', initials: 'ST', text: 'Tenemos 2 tickets urgentes hoy: TK-001 y TK-003.', time: '2026-02-20 08:45' },
-          { user: 'Melky Jaime', initials: 'MJ', text: 'Dale prioridad al TK-001, el artista lleva 2 días sin acceso.', time: '2026-02-20 08:50' },
-        ]
-      },
-      '#finanzas': {
-        name: 'Finanzas', icon: '💰', desc: 'Canal del equipo de finanzas',
-        messages: [
-          { user: 'Mariela', initials: 'MA', text: 'El reporte de febrero está listo. ¿Quién lo revisa?', time: '2026-02-20 10:30' },
-          { user: 'Melky Jaime', initials: 'MJ', text: 'Yo lo reviso esta tarde. Mándamelo por aquí.', time: '2026-02-20 10:35' },
-        ]
-      },
-      '#ar-ventas': {
-        name: 'A&R / Ventas', icon: '🎵', desc: 'Canal de A&R y ventas',
-        messages: [
-          { user: 'Deschamps', initials: 'DE', text: 'Nuevo demo recibido de "Neon Dreams" — suena bien 🔥', time: '2026-02-20 11:00' },
-        ]
-      },
-      '#proyectos': {
-        name: 'Proyectos', icon: '📋', desc: 'Canal de gestión de proyectos',
-        messages: [
-          { user: 'Carlos', initials: 'CA', text: 'El videoclip "Fuego" está pausado. ¿Retomamos la próxima semana?', time: '2026-02-20 11:15' },
-          { user: 'Melky Jaime', initials: 'MJ', text: 'Sí, retomamos el lunes. Prepara el timeline actualizado.', time: '2026-02-20 11:20' },
-        ]
-      },
-      '#produccion': {
-        name: 'Producción', icon: '🎧', desc: 'Canal de producción musical',
-        messages: [
-          { user: 'Deschamps', initials: 'DE', text: 'La mezcla del track 3 quedó lista. ¿La subo al drive?', time: '2026-02-20 14:00' },
-        ]
+    const { data: msgs, error } = await supabase.from('chat_messages').select('*').order('created_at');
+    if (error) throw error;
+    for (const m of (msgs || [])) {
+      const msg = { user: m.sender_name, initials: m.sender_initials, text: m.text, time: m.created_at ? new Date(m.created_at).toISOString().slice(0, 16).replace('T', ' ') : '' };
+      if (m.dm_key) {
+        if (!chatData.dms[m.dm_key]) chatData.dms[m.dm_key] = [];
+        chatData.dms[m.dm_key].push(msg);
+      } else if (m.channel && chatData.channels[m.channel]) {
+        chatData.channels[m.channel].messages.push(msg);
       }
-    },
-    dms: {}
-  };
-  localStorage.setItem('wildtone_chat', JSON.stringify(defaultChat));
-  return defaultChat;
+    }
+  } catch (e) { console.warn('Chat load failed:', e); }
+  return chatData;
 }
 
-function saveChatData(chatData) {
-  try { localStorage.setItem('wildtone_chat', JSON.stringify(chatData)); } catch (e) { }
-}
+function saveChatData(chatData) { /* Supabase is source of truth */ }
 
-function renderChat() {
+async function renderChat() {
   const el = document.getElementById('module-chat');
   const user = getCurrentUser();
-  const chatData = getChatData();
+  const chatData = await getChatData();
   const allUsers = [
     { name: 'Melky Jaime', initials: 'MJ', dept: 'Dirección', color: '#7c3aed' },
     { name: 'Deschamps', initials: 'DE', dept: 'A&R', color: '#3b82f6' },
-    { name: 'Starling', initials: 'ST', dept: 'Soporte', color: '#22c55e' },
-    { name: 'Mariela', initials: 'MA', dept: 'Finanzas', color: '#eab308' },
-    { name: 'Carlos', initials: 'CA', dept: 'Proyectos', color: '#06b6d4' },
+    { name: 'Emy', initials: 'EM', dept: 'Soporte', color: '#22c55e' },
   ].filter(u => u.name !== user.name);
 
   const isChannel = chatCurrentChannel.startsWith('#');
@@ -1987,25 +1956,21 @@ function renderChat() {
   if (msgContainer) msgContainer.scrollTop = msgContainer.scrollHeight;
 }
 
-function sendChatMessage() {
+async function sendChatMessage() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text) return;
   const user = getCurrentUser();
-  const chatData = getChatData();
-  const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
-  const msg = { user: user.name, initials: user.initials, text: text, time: now };
+  const msgData = { sender_name: user.name, sender_initials: user.initials, text: text };
 
   if (chatCurrentChannel.startsWith('#')) {
-    if (chatData.channels[chatCurrentChannel]) {
-      chatData.channels[chatCurrentChannel].messages.push(msg);
-    }
+    msgData.channel = chatCurrentChannel;
   } else {
     const dmKey = [user.name, chatCurrentChannel].sort().join('::');
-    if (!chatData.dms[dmKey]) chatData.dms[dmKey] = [];
-    chatData.dms[dmKey].push(msg);
+    msgData.channel = 'dm';
+    msgData.dm_key = dmKey;
   }
-  saveChatData(chatData);
+  try { await supabase.from('chat_messages').insert(msgData); } catch (e) { console.error('Chat send error:', e); }
   renderChat();
 }
 
