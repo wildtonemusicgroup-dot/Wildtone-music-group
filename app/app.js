@@ -295,13 +295,7 @@ function navigate(module) {
     return;
   }
   // Close mobile sidebar when navigating
-  var ov = document.getElementById('sidebarOverlay');
-  if (ov && ov.style.display === 'block') {
-    var sb = document.getElementById('sidebar');
-    if (sb) sb.style.transform = 'translateX(-100%)';
-    ov.style.display = 'none';
-    document.body.style.overflow = '';
-  }
+  if (typeof window.closeMobileSidebar === 'function') window.closeMobileSidebar();
   document.querySelectorAll('.module-view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 

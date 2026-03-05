@@ -149,47 +149,47 @@
     <script src="supabase.js"></script>
     <script src="app.js"></script>
     <script>
-        // Mobile sidebar toggle
+        // Mobile sidebar — global close function
+        window.closeMobileSidebar = function () {
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.getElementById('sidebarOverlay');
+            if (sidebar) sidebar.style.transform = 'translateX(-100%)';
+            if (overlay) overlay.style.display = 'none';
+            document.body.style.overflow = '';
+        };
         (function () {
             var sidebar = document.getElementById('sidebar');
             var overlay = document.getElementById('sidebarOverlay');
             var toggle = document.getElementById('sidebarToggle');
-            var isOpen = false;
-
-            function openSidebar() {
-                isOpen = true;
-                sidebar.style.transform = 'translateX(0)';
-                sidebar.style.zIndex = '1000';
-                overlay.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeSidebar() {
-                isOpen = false;
-                sidebar.style.transform = 'translateX(-100%)';
-                sidebar.style.zIndex = '';
-                overlay.style.display = 'none';
-                document.body.style.overflow = '';
-            }
 
             toggle.addEventListener('click', function (e) {
                 e.stopPropagation();
-                if (isOpen) closeSidebar(); else openSidebar();
+                var isOpen = overlay.style.display === 'block';
+                if (isOpen) {
+                    window.closeMobileSidebar();
+                } else {
+                    sidebar.style.transform = 'translateX(0)';
+                    sidebar.style.zIndex = '1000';
+                    overlay.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                }
             });
 
-            overlay.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', function () {
+                window.closeMobileSidebar();
+            });
 
             // Close sidebar on any nav click (mobile)
             sidebar.addEventListener('click', function (e) {
                 var navItem = e.target.closest('.nav-item, [data-module]');
                 if (navItem && window.innerWidth <= 768) {
-                    setTimeout(closeSidebar, 100);
+                    setTimeout(window.closeMobileSidebar, 100);
                 }
             });
 
             // On resize to desktop, reset sidebar
             window.addEventListener('resize', function () {
-                if (window.innerWidth > 768 && isOpen) closeSidebar();
+                if (window.innerWidth > 768 && overlay.style.display === 'block') window.closeMobileSidebar();
                 if (window.innerWidth > 768) sidebar.style.transform = '';
             });
         })();
