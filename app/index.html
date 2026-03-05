@@ -149,31 +149,48 @@
     <script src="supabase.js"></script>
     <script src="app.js"></script>
     <script>
-        // Sidebar toggle for mobile
+        // Mobile sidebar toggle
         (function () {
             var sidebar = document.getElementById('sidebar');
             var overlay = document.getElementById('sidebarOverlay');
             var toggle = document.getElementById('sidebarToggle');
+            var isOpen = false;
+
             function openSidebar() {
+                isOpen = true;
                 sidebar.style.transform = 'translateX(0)';
                 sidebar.style.zIndex = '1000';
                 overlay.style.display = 'block';
+                document.body.style.overflow = 'hidden';
             }
+
             function closeSidebar() {
-                sidebar.style.transform = '';
+                isOpen = false;
+                sidebar.style.transform = 'translateX(-100%)';
                 sidebar.style.zIndex = '';
                 overlay.style.display = 'none';
+                document.body.style.overflow = '';
             }
-            toggle.addEventListener('click', function () {
-                if (overlay.style.display === 'block') {
-                    closeSidebar();
-                } else {
-                    openSidebar();
+
+            toggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                if (isOpen) closeSidebar(); else openSidebar();
+            });
+
+            overlay.addEventListener('click', closeSidebar);
+
+            // Close sidebar on any nav click (mobile)
+            sidebar.addEventListener('click', function (e) {
+                var navItem = e.target.closest('.nav-item, [data-module]');
+                if (navItem && window.innerWidth <= 768) {
+                    setTimeout(closeSidebar, 100);
                 }
             });
-            overlay.addEventListener('click', closeSidebar);
-            document.getElementById('sidebarNav').addEventListener('click', function () {
-                if (window.innerWidth <= 768) closeSidebar();
+
+            // On resize to desktop, reset sidebar
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 768 && isOpen) closeSidebar();
+                if (window.innerWidth > 768) sidebar.style.transform = '';
             });
         })();
     </script>
