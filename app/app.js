@@ -295,11 +295,11 @@ function navigate(module) {
     return;
   }
   // Close mobile sidebar when navigating
-  if (window.innerWidth <= 768) {
+  var ov = document.getElementById('sidebarOverlay');
+  if (ov && ov.style.display === 'block') {
     var sb = document.getElementById('sidebar');
-    var ov = document.getElementById('sidebarOverlay');
     if (sb) sb.style.transform = 'translateX(-100%)';
-    if (ov) ov.style.display = 'none';
+    ov.style.display = 'none';
     document.body.style.overflow = '';
   }
   document.querySelectorAll('.module-view').forEach(v => v.classList.remove('active'));
