@@ -294,6 +294,14 @@ function navigate(module) {
     showToast('🚫 No tienes acceso a este módulo');
     return;
   }
+  // Close mobile sidebar when navigating
+  if (window.innerWidth <= 768) {
+    var sb = document.getElementById('sidebar');
+    var ov = document.getElementById('sidebarOverlay');
+    if (sb) sb.style.transform = 'translateX(-100%)';
+    if (ov) ov.style.display = 'none';
+    document.body.style.overflow = '';
+  }
   document.querySelectorAll('.module-view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 

@@ -1459,8 +1459,10 @@ td:first-child {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.6);
-    z-index: 998;
+    z-index: 999;
     backdrop-filter: blur(2px);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: none;
 }
 
 .sidebar-overlay.active {
