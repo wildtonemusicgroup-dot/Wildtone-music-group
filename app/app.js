@@ -294,11 +294,14 @@ function navigate(module) {
     showToast('🚫 No tienes acceso a este módulo');
     return;
   }
-  // Close mobile sidebar when navigating
+  // Close mobile sidebar when navigating (only if overlay is showing = mobile)
   try {
-    document.getElementById('sidebar').style.transform = 'translateX(-100%)';
-    document.getElementById('sidebarOverlay').style.display = 'none';
-    document.body.style.overflow = '';
+    var _ov = document.getElementById('sidebarOverlay');
+    if (_ov && _ov.style.display === 'block') {
+      document.getElementById('sidebar').style.transform = 'translateX(-100%)';
+      _ov.style.display = 'none';
+      document.body.style.overflow = '';
+    }
   } catch (e) { }
   document.querySelectorAll('.module-view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
