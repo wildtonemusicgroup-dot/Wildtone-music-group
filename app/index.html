@@ -153,10 +153,11 @@
         window.closeMobileSidebar = function () {
             var sidebar = document.getElementById('sidebar');
             var overlay = document.getElementById('sidebarOverlay');
-            if (sidebar) sidebar.classList.remove('open');
-            if (overlay) overlay.classList.remove('active');
+            if (sidebar) sidebar.style.transform = 'translateX(-100%)';
+            if (overlay) overlay.style.display = 'none';
             document.body.style.overflow = '';
         };
+
         (function () {
             var sidebar = document.getElementById('sidebar');
             var overlay = document.getElementById('sidebarOverlay');
@@ -165,11 +166,12 @@
             if (toggle) {
                 toggle.addEventListener('click', function (e) {
                     e.stopPropagation();
-                    if (sidebar.classList.contains('open')) {
+                    var isOpen = overlay && overlay.style.display === 'block';
+                    if (isOpen) {
                         window.closeMobileSidebar();
                     } else {
-                        sidebar.classList.add('open');
-                        overlay.classList.add('active');
+                        if (sidebar) sidebar.style.transform = 'translateX(0)';
+                        if (overlay) overlay.style.display = 'block';
                         document.body.style.overflow = 'hidden';
                     }
                 });
@@ -191,10 +193,12 @@
                 });
             }
 
-            // On resize to desktop, reset classes
+            // On resize to desktop, reset styles
             window.addEventListener('resize', function () {
-                if (window.innerWidth > 768 && sidebar && sidebar.classList.contains('open')) {
-                    window.closeMobileSidebar();
+                if (window.innerWidth > 768) {
+                    var isMobileMenuOpen = overlay && overlay.style.display === 'block';
+                    if (isMobileMenuOpen) window.closeMobileSidebar();
+                    if (sidebar) sidebar.style.transform = ''; // Clear inline transform so CSS takes over
                 }
             });
         })();
