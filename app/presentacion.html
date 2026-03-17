@@ -2,247 +2,582 @@
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pitch Deck - Wildtone Operations Suite</title>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reset.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/black.min.css" id="theme">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wildtone Operations Suite — Presentación</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
-        
-        .reveal {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f0f13 0%, #1a1525 100%);
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --brand: #7c3aed;
+            --brand-pink: #ec4899;
+            --bg: #09090b;
+            --surface: #18181b;
+            --border: rgba(255,255,255,0.08);
+            --text: #fafafa;
+            --text-dim: #a1a1aa;
         }
-        .reveal h1, .reveal h2, .reveal h3 {
-            font-family: 'Inter', sans-serif;
-            text-transform: none;
-            font-weight: 800;
-            color: #ffffff;
-            letter-spacing: -0.5px;
-        }
-        .reveal h1 { font-size: 3em; background: linear-gradient(45deg, #7c3aed, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .reveal h2 { color: #a78bfa; font-size: 2.2em; }
-        .reveal h3 { font-size: 1.5em; color: #d8b4fe; }
-        .reveal p, .reveal li { font-size: 0.85em; font-weight: 300; color: #e2e8f0; line-height: 1.4; }
-        .reveal ul { margin-left: 1em; }
-        .reveal li { margin-bottom: 0.5em; }
-        
-        .wmg-logo {
-            width: 150px;
-            margin-bottom: 20px !important;
-        }
-        .screenshot-container {
-            margin-top: 20px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
-            max-height: 400px;
+
+        html { scroll-behavior: smooth; scroll-snap-type: y mandatory; overflow-y: scroll; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+
+        /* ── SLIDE ── */
+        .slide {
+            min-height: 100vh;
+            scroll-snap-align: start;
             display: flex;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
+            padding: 60px 80px;
+            position: relative;
+            overflow: hidden;
         }
-        .screenshot-container img {
-            margin: 0 !important;
-            border: none !important;
-            box-shadow: none !important;
-            object-fit: cover;
+        .slide::before {
+            content: '';
+            position: absolute;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -200px; right: -200px;
+            pointer-events: none;
+        }
+
+        /* ── TYPOGRAPHY ── */
+        .slide-number {
+            position: absolute;
+            top: 32px; left: 40px;
+            font-size: 14px; font-weight: 600;
+            color: var(--brand);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        h1 {
+            font-size: clamp(48px, 6vw, 80px);
+            font-weight: 900;
+            background: linear-gradient(135deg, #7c3aed, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+        h2 {
+            font-size: clamp(32px, 4vw, 56px);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+        h3 {
+            font-size: clamp(18px, 2vw, 24px);
+            font-weight: 400;
+            color: var(--text-dim);
+            line-height: 1.5;
+            max-width: 700px;
+        }
+        .accent { color: var(--brand-pink); }
+        .highlight {
+            background: linear-gradient(135deg, var(--brand), var(--brand-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ── LAYOUT ── */
+        .split {
+            display: flex;
+            align-items: center;
+            gap: 60px;
             width: 100%;
+            max-width: 1200px;
         }
-        .mobile-mockup {
-            width: 250px;
-            border-radius: 30px;
-            border: 8px solid #333;
-            margin: 0 auto;
+        .split .text { flex: 1; }
+        .split .visual { flex: 1.2; }
+
+        .text ul {
+            list-style: none;
+            margin-top: 24px;
         }
-        
-        /* Auto-progress bar styling */
-        .reveal .progress { height: 4px; color: #ec4899; }
-        
-        /* Contact Slide */
-        .contact-box {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(124, 58, 237, 0.3);
-            border-radius: 16px;
+        .text ul li {
+            padding: 12px 0;
+            font-size: 18px;
+            color: var(--text-dim);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .text ul li::before {
+            content: '→';
+            color: var(--brand);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .text ul li strong { color: #fff; }
+
+        /* ── SCREENSHOT FRAME ── */
+        .app-frame {
+            width: 100%;
+            border-radius: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+            position: relative;
+        }
+        .app-frame-bar {
+            height: 36px;
+            background: #27272a;
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            gap: 8px;
+        }
+        .app-frame-dot {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+        }
+        .dot-r { background: #ef4444; }
+        .dot-y { background: #f59e0b; }
+        .dot-g { background: #22c55e; }
+        .app-frame-url {
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+            color: #71717a;
+            font-family: monospace;
+        }
+        .app-frame iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+            display: block;
+        }
+        .app-frame-fallback {
+            width: 100%;
+            height: 420px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%);
+            color: var(--text-dim);
+            font-size: 16px;
+            text-align: center;
             padding: 40px;
+        }
+
+        /* ── STATS ── */
+        .stats {
+            display: flex;
+            gap: 40px;
             margin-top: 40px;
         }
-        .contact-email {
-            font-size: 1.2em;
-            color: #ec4899;
+        .stat {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--brand), var(--brand-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-top: 4px;
+        }
+
+        /* ── CTA SLIDE ── */
+        .cta-box {
+            margin-top: 40px;
+            padding: 32px 48px;
+            background: rgba(124,58,237,0.08);
+            border: 1px solid rgba(124,58,237,0.25);
+            border-radius: 16px;
+            text-align: center;
+        }
+        .cta-email {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--brand-pink);
+            margin-top: 8px;
+        }
+
+        /* ── FEATURES GRID ── */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+            max-width: 1000px;
+        }
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            transition: border-color 0.3s;
+        }
+        .feature-card:hover { border-color: var(--brand); }
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        .feature-card h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        /* ── PILL BADGES ── */
+        .pill {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 12px;
             font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .pill-purple { background: rgba(124,58,237,0.15); color: #a78bfa; }
+        .pill-pink { background: rgba(236,72,153,0.15); color: #f472b6; }
+        .pill-green { background: rgba(34,197,94,0.15); color: #4ade80; }
+
+        /* ── LOGO ── */
+        .logo { height: 48px; margin-bottom: 24px; }
+
+        /* ── AUTO-PLAY INDICATOR ── */
+        .auto-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 12px;
+            color: var(--text-dim);
+            z-index: 999;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .auto-indicator:hover { border-color: var(--brand); color: #fff; }
+        .auto-indicator.playing { border-color: var(--brand-pink); color: var(--brand-pink); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .slide { padding: 40px 24px; }
+            .split { flex-direction: column; gap: 32px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .stats { flex-direction: column; gap: 24px; }
+            .app-frame iframe { height: 300px; }
         }
     </style>
 </head>
 <body>
-    <div class="reveal">
-        <div class="slides">
 
-            <!-- Diapositiva 1 -->
-            <section data-autoslide="5000">
-                <img src="https://wildtonemusicgroup.com/wp-content/uploads/2023/10/Cropped-Logo-WMG-Retina-5.png" alt="WMG" class="wmg-logo">
-                <h1>Operations Suite</h1>
-                <h3>Elevando la gestión musical a la era inteligente.</h3>
-            </section>
-
-            <!-- Diapositiva 2 -->
-            <section data-autoslide="8000">
-                <h2>El Problema</h2>
-                <h3>Los desafíos modernos de la industria musical</h3>
-                <ul>
-                    <li><strong>Fragmentación:</strong> Datos, finanzas y marketing en emails, excels y WhatsApps.</li>
-                    <li><strong>Tiempos de Respuesta:</strong> Dificultad para coordinar aprobaciones en tiempo real.</li>
-                    <li><strong>Falta de Claridad:</strong> Dificultad para rastrear gastos vs. ingresos instantáneamente.</li>
-                    <li><strong>Operaciones Manuales:</strong> Demasiado tiempo administrativo, menos tiempo para el talento.</li>
-                </ul>
-            </section>
-
-            <!-- Diapositiva 3 -->
-            <section data-autoslide="8000">
-                <h2>La Solución</h2>
-                <h3>Conoce a Wildtone Operations Suite</h3>
-                <p>Un ecosistema centralizado, diseñado a medida y exclusivo para las operaciones modernas.</p>
-                <ul>
-                    <li><strong>Transparencia:</strong> Visibilidad 360° de proyectos, finanzas y soporte.</li>
-                    <li><strong>Colaboración:</strong> Flujos de trabajo compartidos desde cualquier dispositivo.</li>
-                    <li><strong>Inteligencia Artificial:</strong> Asistencia activa y análisis inteligente de datos.</li>
-                </ul>
-            </section>
-
-            <!-- Diapositiva 4 -->
-            <section data-autoslide="10000">
-                <h2>Centro de Control</h2>
-                <h3>Gestión de Proyectos Transparente</h3>
-                <div style="display: flex; align-items: center; gap: 40px; text-align: left;">
-                    <div style="flex: 1;">
-                        <ul>
-                            <li>Monitoreo en tiempo real del estado de cada lanzamiento.</li>
-                            <li><strong>Métricas Clave (KPIs):</strong> Entiende presupuestos e ingresos al instante.</li>
-                            <li>Acceso directo a tareas pendientes y cronogramas.</li>
-                            <li>Una única fuente de verdad para el mánager y el artista.</li>
-                        </ul>
-                    </div>
-                    <div class="screenshot-container" style="flex: 1.2;">
-                        <img src="assets/dashboard.png" alt="Dashboard">
-                    </div>
-                </div>
-            </section>
-
-            <!-- Diapositiva 5 -->
-            <section data-autoslide="10000">
-                <h2>Finanzas y Royalties</h2>
-                <h3>Claridad Financiera Absoluta</h3>
-                <div style="display: flex; align-items: center; gap: 40px; text-align: left;">
-                    <div class="screenshot-container" style="flex: 1.2;">
-                        <img src="assets/finanzas.png" alt="Finance">
-                    </div>
-                    <div style="flex: 1;">
-                        <ul>
-                            <li>Visualización instantánea del ROI por artista.</li>
-                            <li>Registros en vivo de presupuesto total y gastos operativos.</li>
-                            <li>Reportes exportables en un clic (CSV).</li>
-                            <li>Decisiones basadas en datos económicos en tiempo real.</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Diapositiva 6 -->
-            <section data-autoslide="10000">
-                <h2>Comunicación Inmediata</h2>
-                <h3>Conectando Equipo y Artistas</h3>
-                <ul>
-                    <li><strong>Chat Interconectado:</strong> Conexión en vivo e inmediata entre usuarios.</li>
-                    <li><strong>Módulo de Soporte (Tickets):</strong> Registro formal de solicitudes y problemas creativos.</li>
-                    <li><strong>Historial centralizado:</strong> Todo queda documentado por proyecto. Se acabó el "quién dijo qué".</li>
-                </ul>
-                <div class="screenshot-container" style="max-height: 250px;">
-                    <img src="assets/chat.png" alt="Chat" style="object-position: center 20%;">
-                </div>
-            </section>
-
-            <!-- Diapositiva 7 -->
-            <section data-autoslide="10000">
-                <h2>La Ventaja Injusta</h2>
-                <h3>Tu Compañero de IA Personalizado</h3>
-                <div style="display: flex; align-items: center; gap: 40px; text-align: left;">
-                    <div style="flex: 1;">
-                        <ul>
-                            <li>Integración directa de inteligencia artificial al flujo musical.</li>
-                            <li><strong>Capacidades:</strong> Resúmenes automáticos, generación de copys y análisis de tendencias.</li>
-                            <li><strong>Eficiencia 24/7:</strong> El asistente nunca duerme, brindando soporte analítico a las 3:00 AM si es necesario.</li>
-                        </ul>
-                    </div>
-                    <div class="screenshot-container" style="flex: 1;">
-                        <img src="assets/ai.png" alt="AI">
-                    </div>
-                </div>
-            </section>
-
-            <!-- Diapositiva 8 -->
-            <section data-autoslide="9000">
-                <h2>Construido para Escalar</h2>
-                <h3>Tecnología y Seguridad</h3>
-                <div style="display: flex; align-items: center; gap: 40px;">
-                    <div style="flex: 1.5; text-align: left;">
-                        <ul>
-                            <li><strong>Seguridad de Grado Empresarial:</strong> Bases de datos PostgreSQL seguras por RLS.</li>
-                            <li><strong>Desempeño Global:</strong> Edge Network de Vercel para velocidad relámpago en cualquier continente.</li>
-                            <li><strong>Diseño Mobile-First:</strong> Aprobaciones desde el celular con fluidez nativa.</li>
-                        </ul>
-                    </div>
-                    <div style="flex: 1;">
-                        <img class="mobile-mockup" src="assets/mobile.png" alt="Mobile">
-                    </div>
-                </div>
-            </section>
-
-            <!-- Diapositiva 9 -->
-            <section data-autoslide="8000">
-                <h2>El Impacto</h2>
-                <h3>Beneficios Directos</h3>
-                <ul>
-                    <li><h3 style="display: inline; color:#10b981;">-40%</h3> en tiempos muertos de gestión administrativa.</li>
-                    <li><h3 style="display: inline; color:#3b82f6;">Confianza</h3> total de los artistas en la transparencia de gastos.</li>
-                    <li><h3 style="display: inline; color:#f59e0b;">Exclusividad</h3> tecnológica que posiciona a Wildtone como la disquera élite moderna.</li>
-                </ul>
-            </section>
-
-            <!-- Diapositiva 10 -->
-            <section data-autoslide="false">
-                <!-- Se detiene aquí (autoslide: false) -->
-                <img src="https://wildtonemusicgroup.com/wp-content/uploads/2023/10/Cropped-Logo-WMG-Retina-5.png" alt="WMG" class="wmg-logo" style="width: 200px;">
-                <h2>Bienvenidos al Nivel Élite</h2>
-                <p>La revolución en la gestión musical comienza aquí.</p>
-                
-                <div class="contact-box">
-                    <p style="margin-bottom: 5px;">Conversemos sobre el futuro:</p>
-                    <div class="contact-email">business@wildtonemusicgroup.com</div>
-                </div>
-            </section>
-
+    <!-- ═══════════════ SLIDE 1: COVER ═══════════════ -->
+    <section class="slide" style="text-align: center;">
+        <img src="https://wildtonemusicgroup.com/wp-content/uploads/2023/10/Cropped-Logo-WMG-Retina-5.png" class="logo" alt="WMG" onerror="this.style.display='none'">
+        <h1>Operations Suite</h1>
+        <h3>Tu disquera merece una plataforma a la altura.<br>La gestión musical más inteligente del mercado.</h3>
+        <div class="stats">
+            <div class="stat"><div class="stat-value">8</div><div class="stat-label">Módulos Integrados</div></div>
+            <div class="stat"><div class="stat-value">AI</div><div class="stat-label">Inteligencia Artificial</div></div>
+            <div class="stat"><div class="stat-value">24/7</div><div class="stat-label">Acceso Global</div></div>
         </div>
-    </div>
+    </section>
 
-    <!-- Scripts de Reveal.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+    <!-- ═══════════════ SLIDE 2: THE PROBLEM ═══════════════ -->
+    <section class="slide">
+        <div style="max-width: 900px; text-align: center;">
+            <span class="pill pill-pink">El Problema</span>
+            <h2>La industria musical <span class="accent">pierde millones</span> en ineficiencia</h2>
+            <h3>Equipos fragmentados entre WhatsApp, Excel, emails y llamadas. Datos financieros imposibles de rastrear. Artistas desinformados sobre el estado de sus proyectos.</h3>
+            <div class="features-grid" style="margin-top: 48px;">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h4>Datos Dispersos</h4>
+                    <p>Finanzas, contratos y calendarios de lanzamiento repartidos en 10 herramientas diferentes.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏳</div>
+                    <h4>Tiempos Muertos</h4>
+                    <p>Horas perdidas buscando aprobaciones, archivos y actualizaciones de estado.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h4>Sin Transparencia</h4>
+                    <p>Los artistas no tienen visibilidad clara sobre sus gastos, inversiones y retornos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ SLIDE 3: THE SOLUTION ═══════════════ -->
+    <section class="slide" style="text-align: center;">
+        <span class="pill pill-purple">La Solución</span>
+        <h2>Una plataforma.<br><span class="highlight">Todo el control.</span></h2>
+        <h3>Wildtone Operations Suite centraliza proyectos, finanzas, comunicación, soporte y análisis con IA en un solo ecosistema elegante y ultrarrápido.</h3>
+        <div class="features-grid" style="margin-top: 48px;">
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h4>Transparencia Total</h4>
+                <p>Visibilidad 360° de cada proyecto, presupuesto y lanzamiento en tiempo real.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h4>Colaboración Global</h4>
+                <p>Chat interno, tickets de soporte y flujos de trabajo desde cualquier dispositivo.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h4>Inteligencia Artificial</h4>
+                <p>Agente AI integrado que analiza, clasifica y automatiza tareas complejas.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ SLIDE 4: DASHBOARD ═══════════════ -->
+    <section class="slide">
+        <div class="split">
+            <div class="text">
+                <span class="pill pill-purple">Dashboard</span>
+                <h2>Centro de<br>Comando Total</h2>
+                <ul>
+                    <li><strong>KPIs en tiempo real</strong> — Proyectos activos, presupuesto, soporte</li>
+                    <li><strong>Vista unificada</strong> — Todo tu negocio musical en una sola pantalla</li>
+                    <li><strong>Acciones rápidas</strong> — Crea tareas, tickets y proyectos al instante</li>
+                </ul>
+            </div>
+            <div class="visual">
+                <div class="app-frame">
+                    <div class="app-frame-bar">
+                        <div class="app-frame-dot dot-r"></div>
+                        <div class="app-frame-dot dot-y"></div>
+                        <div class="app-frame-dot dot-g"></div>
+                        <div class="app-frame-url">wildtone-music-group.vercel.app</div>
+                    </div>
+                    <iframe src="https://wildtone-music-group.vercel.app/app/index.html" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ SLIDE 5: FINANZAS ═══════════════ -->
+    <section class="slide">
+        <div class="split">
+            <div class="visual">
+                <div class="app-frame">
+                    <div class="app-frame-bar">
+                        <div class="app-frame-dot dot-r"></div>
+                        <div class="app-frame-dot dot-y"></div>
+                        <div class="app-frame-dot dot-g"></div>
+                        <div class="app-frame-url">Módulo de Finanzas</div>
+                    </div>
+                    <div class="app-frame-fallback" style="background: linear-gradient(135deg, #1a1a2e, #0d0d14);">
+                        <div>
+                            <div style="font-size: 48px; margin-bottom: 16px;">💰</div>
+                            <div style="font-size: 20px; color: #fff; font-weight: 700;">Módulo de Finanzas</div>
+                            <div style="margin-top: 8px; color: #a1a1aa;">Presupuestos • Gastos • ROI • Exportación CSV</div>
+                            <div style="margin-top: 24px; display: flex; gap: 24px; justify-content: center;">
+                                <div><div style="font-size: 28px; font-weight: 800; color: #22c55e;">$0</div><div style="font-size: 11px; color: #71717a;">Ingresos</div></div>
+                                <div><div style="font-size: 28px; font-weight: 800; color: #ef4444;">$0</div><div style="font-size: 11px; color: #71717a;">Gastos</div></div>
+                                <div><div style="font-size: 28px; font-weight: 800; color: #3b82f6;">$0</div><div style="font-size: 11px; color: #71717a;">Balance</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text">
+                <span class="pill pill-green">Finanzas</span>
+                <h2>Claridad Financiera<br><span class="accent">Absoluta</span></h2>
+                <ul>
+                    <li><strong>ROI por proyecto</strong> — Sabe exactamente cuánto inviertes y cuánto generas</li>
+                    <li><strong>Presupuestos activos</strong> — Control de gastos por categoría en tiempo real</li>
+                    <li><strong>Exportación CSV</strong> — Descarga reportes limpios para tu contador en 1 clic</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ SLIDE 6: COMUNICACIÓN ═══════════════ -->
+    <section class="slide" style="text-align: center;">
+        <span class="pill pill-pink">Comunicación</span>
+        <h2>Chat Interno +<br><span class="highlight">Soporte con Tickets</span></h2>
+        <h3>Conexión instantánea entre managers, artistas y equipo técnico.<br>Cada solicitud queda documentada y rastreada.</h3>
+        <div class="features-grid" style="margin-top: 48px;">
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h4>Chat en Tiempo Real</h4>
+                <p>Mensajería instantánea con canales por proyecto. Notificaciones al momento.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎫</div>
+                <h4>Sistema de Tickets</h4>
+                <p>Crea, asigna y resuelve solicitudes con SLA y prioridades automáticas.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📋</div>
+                <h4>Historial Completo</h4>
+                <p>Todo queda registrado. Cero ambigüedades, cero "yo nunca dije eso".</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ SLIDE 7: IA ═══════════════ -->
+    <section class="slide">
+        <div class="split">
+            <div class="text">
+                <span class="pill pill-purple">Inteligencia Artificial</span>
+                <h2>Tu Ventaja<br><span class="accent">Injusta</span></h2>
+                <ul>
+                    <li><strong>Agente AI integrado</strong> — Consulta cualquier dato de tu negocio en lenguaje natural</li>
+                    <li><strong>Clasificación inteligente</strong> — Los tickets se priorizan automáticamente según urgencia</li>
+                    <li><strong>24/7 sin descanso</strong> — Un asistente que nunca duerme, siempre disponible para tu equipo</li>
+                    <li><strong>Análisis predictivo</strong> — Identifica tendencias de gastos y oportunidades de ingreso</li>
+                </ul>
+            </div>
+            <div class="visual">
+                <div class="app-frame">
+                    <div class="app-frame-bar">
+                        <div class="app-frame-dot dot-r"></div>
+                        <div class="app-frame-dot dot-y"></div>
+                        <div class="app-frame-dot dot-g"></div>
+                        <div class="app-frame-url">Agente AI</div>
+                    </div>
+                    <div class="app-frame-fallback" style="background: linear-gradient(135deg, #1a1025, #0d0d14);">
+                        <div>
+                            <div style="font-size: 64px; margin-bottom: 16px;">🤖</div>
+                            <div style="font-size: 20px; color: #fff; font-weight: 700;">Agente AI de Wildtone</div>
+                            <div style="margin-top: 8px; color: #a1a1aa;">Potenciado por Inteligencia Artificial Avanzada</div>
+                            <div style="margin-top: 24px; padding: 16px 24px; background: rgba(124,58,237,0.15); border-radius: 12px; color: #d8b4fe; font-size: 14px;">
+                                "Analiza los gastos del último trimestre y sugiere optimizaciones..."
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ SLIDE 8: TECH ═══════════════ -->
+    <section class="slide" style="text-align: center;">
+        <span class="pill pill-green">Tecnología</span>
+        <h2>Construido para <span class="highlight">Escalar</span></h2>
+        <h3>Infraestructura empresarial. Velocidad de startup.</h3>
+        <div class="features-grid" style="margin-top: 48px;">
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h4>Seguridad Empresarial</h4>
+                <p>Base de datos PostgreSQL con Row Level Security. Cada usuario solo ve lo que le corresponde.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h4>Mobile First</h4>
+                <p>Diseñado para funcionar como app nativa desde el celular del artista o mánager.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h4>Edge Network Global</h4>
+                <p>Desplegado en Vercel Edge. Carga instantánea desde Miami, Bogotá, Madrid o Tokyo.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ SLIDE 9: IMPACT ═══════════════ -->
+    <section class="slide" style="text-align: center;">
+        <span class="pill pill-pink">Resultados</span>
+        <h2>El Impacto de<br><span class="highlight">Wildtone Suite</span></h2>
+        <div class="stats" style="margin-top: 48px;">
+            <div class="stat">
+                <div class="stat-value">-40%</div>
+                <div class="stat-label">Tiempo Administrativo</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Transparencia Financiera</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">∞</div>
+                <div class="stat-label">Escalabilidad Global</div>
+            </div>
+        </div>
+        <h3 style="margin-top: 40px;">Una plataforma exclusiva que separa a Wildtone Music Group<br>como la disquera tecnológica del futuro.</h3>
+    </section>
+
+    <!-- ═══════════════ SLIDE 10: CTA ═══════════════ -->
+    <section class="slide" style="text-align: center;">
+        <img src="https://wildtonemusicgroup.com/wp-content/uploads/2023/10/Cropped-Logo-WMG-Retina-5.png" class="logo" style="height: 64px;" alt="WMG" onerror="this.style.display='none'">
+        <h2>¿Listo para el<br><span class="highlight">Nivel Élite</span>?</h2>
+        <h3>La revolución en la gestión musical comienza ahora.</h3>
+        <div class="cta-box">
+            <p style="color: var(--text-dim); font-size: 16px;">Conversemos sobre el futuro de tu catálogo:</p>
+            <div class="cta-email">business@wildtonemusicgroup.com</div>
+        </div>
+    </section>
+
+    <!-- ═══════════════ AUTO-PLAY ENGINE ═══════════════ -->
+    <div class="auto-indicator" id="autoBtn" onclick="toggleAuto()">▶ Auto-Play</div>
+
     <script>
-        Reveal.initialize({
-            controls: true,
-            progress: true,
-            center: true,
-            hash: true,
-            
-            // AutoPlay configs
-            autoSlide: 5000, // milisegundos por slide (si no se define en el data-autoslide del section)
-            loop: false,
-            
-            // Animacion de transición
-            transition: 'fade', // none/fade/slide/convex/concave/zoom
-            
-            // Color de fondo
-            backgroundTransition: 'fade'
+        var slides = document.querySelectorAll('.slide');
+        var currentSlide = 0;
+        var autoTimer = null;
+        var isPlaying = false;
+
+        function scrollToSlide(index) {
+            if (index >= slides.length) { stopAuto(); return; }
+            slides[index].scrollIntoView({ behavior: 'smooth' });
+            currentSlide = index;
+        }
+
+        function startAuto() {
+            isPlaying = true;
+            document.getElementById('autoBtn').textContent = '⏸ Pausar';
+            document.getElementById('autoBtn').classList.add('playing');
+            autoTimer = setInterval(function() {
+                currentSlide++;
+                if (currentSlide >= slides.length) { stopAuto(); return; }
+                scrollToSlide(currentSlide);
+            }, 6000);
+        }
+
+        function stopAuto() {
+            isPlaying = false;
+            clearInterval(autoTimer);
+            document.getElementById('autoBtn').textContent = '▶ Auto-Play';
+            document.getElementById('autoBtn').classList.remove('playing');
+        }
+
+        function toggleAuto() {
+            if (isPlaying) stopAuto();
+            else { currentSlide = 0; scrollToSlide(0); setTimeout(startAuto, 500); }
+        }
+
+        // Keyboard controls
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                currentSlide = Math.min(currentSlide + 1, slides.length - 1);
+                scrollToSlide(currentSlide);
+            }
+            if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                currentSlide = Math.max(currentSlide - 1, 0);
+                scrollToSlide(currentSlide);
+            }
+            if (e.key === 'p' || e.key === 'P') toggleAuto();
         });
     </script>
 </body>
