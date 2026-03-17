@@ -280,11 +280,58 @@
 
         /* ── RESPONSIVE ── */
         @media (max-width: 768px) {
-            .slide { padding: 40px 24px; }
-            .split { flex-direction: column; gap: 32px; }
-            .features-grid { grid-template-columns: 1fr; }
-            .stats { flex-direction: column; gap: 24px; }
-            .app-frame iframe { height: 300px; }
+            .slide {
+                padding: 32px 20px;
+                min-height: 100vh;
+                justify-content: center;
+            }
+            .split {
+                flex-direction: column;
+                gap: 28px;
+            }
+            .split .visual { order: -1; }
+            h1 { font-size: 36px; }
+            h2 { font-size: 28px; }
+            h3 { font-size: 15px; }
+            .logo { height: 60px; margin-bottom: 20px; }
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                margin-top: 24px !important;
+            }
+            .feature-card { padding: 20px; }
+            .feature-card h4 { font-size: 15px; }
+            .feature-card p { font-size: 13px; }
+            .feature-icon { font-size: 24px; margin-bottom: 8px; }
+            .stats {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 16px;
+                justify-content: center;
+                margin-top: 24px;
+            }
+            .stat-value { font-size: 32px; }
+            .stat-label { font-size: 12px; }
+            .app-frame iframe { height: 250px; }
+            .app-frame-fallback { height: 280px; }
+            .app-frame-bar { height: 28px; }
+            .app-frame-dot { width: 8px; height: 8px; }
+            .app-frame-url { font-size: 10px; }
+            .text ul li { font-size: 15px; padding: 10px 0; }
+            .cta-box { padding: 24px 20px; }
+            .cta-email { font-size: 16px; word-break: break-all; }
+            .pill { font-size: 10px; padding: 5px 12px; }
+            .slide-number { top: 16px; left: 20px; font-size: 11px; }
+            .auto-indicator { bottom: 12px; right: 12px; font-size: 11px; padding: 6px 12px; }
+        }
+        @media (max-width: 400px) {
+            .slide { padding: 24px 16px; }
+            h1 { font-size: 28px; }
+            h2 { font-size: 24px; }
+            h3 { font-size: 14px; }
+            .logo { height: 48px; }
+            .stat-value { font-size: 26px; }
+            .cta-email { font-size: 14px; }
         }
     </style>
 </head>
