@@ -295,14 +295,10 @@ function navigate(module) {
     return;
   }
   // Close mobile sidebar when navigating (only if overlay is showing = mobile)
-  try {
-    var _ov = document.getElementById('sidebarOverlay');
-    if (_ov && _ov.style.display === 'block') {
-      document.getElementById('sidebar').style.transform = 'translateX(-100%)';
-      _ov.style.display = 'none';
-      document.body.style.overflow = '';
-    }
-  } catch (e) { }
+  var sb = document.getElementById('sidebar');
+  if (sb && sb.classList.contains('open') && typeof window.closeMobileSidebar === 'function') {
+    window.closeMobileSidebar();
+  }
   document.querySelectorAll('.module-view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 

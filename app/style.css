@@ -1481,12 +1481,13 @@ td:first-child {
         height: 100vh;
         z-index: 1000;
         transform: translateX(-100%);
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         width: var(--sidebar-w);
+        background: var(--bg-surface);
     }
 
     .sidebar.open {
-        transform: translateX(0) !important;
+        transform: translateX(0);
         box-shadow: 4px 0 30px rgba(0, 0, 0, 0.5);
     }
 
