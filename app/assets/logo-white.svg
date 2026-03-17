@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 180" fill="none">
+  <!-- Sound wave lines (left) -->
+  <g stroke="white" stroke-width="1.2" stroke-linecap="round" opacity="0.6">
+    <path d="M62 95 Q58 85, 55 95 Q52 105, 48 95"/>
+    <path d="M58 100 Q54 88, 50 100 Q46 112, 42 100"/>
+    <path d="M54 105 Q50 92, 46 105 Q42 118, 38 105"/>
+  </g>
+  <!-- Diagonal bars -->
+  <g fill="white">
+    <!-- Bar 1 (leftmost) -->
+    <rect x="65" y="30" width="12" height="95" rx="2" transform="rotate(-25, 71, 77)"/>
+    <!-- Bar 2 -->
+    <rect x="82" y="25" width="12" height="100" rx="2" transform="rotate(-25, 88, 75)"/>
+    <!-- Bar 3 (tallest, center) -->
+    <rect x="99" y="15" width="14" height="115" rx="2" transform="rotate(-25, 106, 72)"/>
+    <!-- Bar 4 -->
+    <rect x="118" y="20" width="12" height="105" rx="2" transform="rotate(-25, 124, 72)"/>
+  </g>
+  <!-- Text: Wildtone -->
+  <text x="155" y="100" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="48" font-weight="300" fill="white" letter-spacing="1">Wildtone</text>
+  <!-- Text: Music Group -->
+  <text x="157" y="128" font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" font-size="22" font-weight="300" fill="rgba(255,255,255,0.6)" letter-spacing="3">Music  Group</text>
+</svg>
