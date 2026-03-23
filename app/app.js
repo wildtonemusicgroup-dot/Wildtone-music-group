@@ -1792,7 +1792,7 @@ function sendSuggestion(text) {
   sendChat();
 }
 
-function sendChat() {
+async function sendChat() {
   const input = document.getElementById('chatInput');
   const text = input?.value.trim();
   if (!text) return;
@@ -1801,24 +1801,46 @@ function sendChat() {
   state.chatHistory.push({ role: 'user', text });
   const msgs = document.getElementById('chatMessages');
   if (msgs) msgs.innerHTML += renderChatMsg({ role: 'user', text });
+  scrollChat();
 
-  setTimeout(() => {
-    const reply = getAIReply(text);
+  // Show typing indicator
+  const typingId = 'typing-' + Date.now();
+  if (msgs) msgs.innerHTML += `<div class="chat-msg ai" id="${typingId}"><div class="chat-msg-avatar">✦</div><div class="chat-bubble" style="opacity:0.6"><em>Pensando...</em></div></div>`;
+  scrollChat();
+
+  try {
+    const res = await fetch(SUPABASE_URL + '/functions/v1/ai-agent', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+      },
+      body: JSON.stringify({
+        message: text,
+        history: state.chatHistory.slice(-10),
+      }),
+    });
+
+    const data = await res.json();
+    const reply = data.reply || data.error || 'Error al obtener respuesta.';
+
+    // Remove typing indicator
+    const typingEl = document.getElementById(typingId);
+    if (typingEl) typingEl.remove();
+
     state.chatHistory.push({ role: 'ai', text: reply });
     if (msgs) msgs.innerHTML += renderChatMsg({ role: 'ai', text: reply });
     scrollChat();
-  }, 600);
-  scrollChat();
-}
+  } catch (err) {
+    console.error('AI Agent error:', err);
+    const typingEl = document.getElementById(typingId);
+    if (typingEl) typingEl.remove();
 
-function getAIReply(text) {
-  const t = text.toLowerCase();
-  if (t.includes('tarea') && t.includes('hoy')) return '📋 Tienes <strong>4 tareas activas</strong> para hoy:<br>1. Diseño portada EP "Noche Urbana" — Alta<br>2. Contrato distribución digital — Alta<br>3. Mezcla y master track 3 — Media<br>4. Campaña Instagram Stories — Media';
-  if (t.includes('hora') || t.includes('trabajé')) return '⏱ Este mes has trabajado <strong>142 horas</strong> (promedio 8h 30m/día). Tu jornada de hoy lleva 8h 45m. Sin tardanzas registradas.';
-  if (t.includes('pago') || t.includes('gasto')) return '💰 Tienes <strong>3 gastos pendientes de aprobación</strong>:<br>• Diseño gráfico portada — $350<br>• Facebook Ads — $500<br>• Equipos audio — $2,200<br><br>¿Quieres que los envíe a aprobación?';
-  if (t.includes('crea') && t.includes('tarea')) return '✅ Entendido. ¿Confirmas crear la tarea con estos datos?<br><br><strong>Título:</strong> Nueva tarea<br><strong>Asignado:</strong> Tú<br><strong>Vence:</strong> Mañana<br><strong>Prioridad:</strong> Media<br><br><button class="btn btn-sm btn-primary" onclick="showToast(\'✅ Tarea creada\')">Confirmar</button> <button class="btn btn-sm btn-ghost" onclick="showToast(\'Cancelado\')">Cancelar</button>';
-  if (t.includes('reporte') || t.includes('categoría')) return '📊 Reporte de gastos — Febrero 2026:<br>• Equipos: $2,200 (44%)<br>• Producción: $1,200 (24%)<br>• Legal: $800 (16%)<br>• Marketing: $500 (10%)<br>• Diseño: $350 (7%)<br><br><strong>Total: $5,050 USD</strong><br><br><button class="btn btn-sm btn-secondary" onclick="showToast(\'Exportando...\')">⬇ Exportar CSV</button>';
-  return '🤔 Entendido. Estoy procesando tu solicitud. Recuerda que cualquier acción de escritura requiere tu confirmación antes de ejecutarse. ¿Puedes ser más específico sobre lo que necesitas?';
+    const errorReply = '⚠️ Error de conexión con el agente AI. Verifica tu conexión a internet.';
+    state.chatHistory.push({ role: 'ai', text: errorReply });
+    if (msgs) msgs.innerHTML += renderChatMsg({ role: 'ai', text: errorReply });
+    scrollChat();
+  }
 }
 
 function scrollChat() {
