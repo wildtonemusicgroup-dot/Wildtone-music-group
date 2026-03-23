@@ -2526,9 +2526,8 @@ async function renderDocs() {
     
     <div class="card" style="margin-bottom: 20px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
-        <div>
-          ${folderHistory.length > 0 ? `<button class="btn btn-sm" onclick="goBackDriveFolder()">⬅ Volver</button>` : ''}
-          <span style="margin-left: 10px; font-weight: 500; font-family: monospace;">Drive > ${folderHistory.length > 0 ? 'Carpeta' : 'Inicio'}</span>
+        <div id="driveBreadcrumb">
+          <span style="font-weight: 500; font-family: monospace;">Drive > Inicio</span>
         </div>
         <button class="btn btn-sm btn-ghost" onclick="loadDriveFiles(currentFolderId)">↻ Recargar</button>
       </div>
@@ -2542,7 +2541,15 @@ async function renderDocs() {
 
 async function loadDriveFiles(folderId) {
   const container = document.getElementById('driveFilesContainer');
+  const breadcrumb = document.getElementById('driveBreadcrumb');
+  
   if (container) container.innerHTML = '<div class="loader-spinner"></div>';
+  if (breadcrumb) {
+    breadcrumb.innerHTML = `
+      ${folderHistory.length > 0 ? `<button class="btn btn-sm" onclick="goBackDriveFolder()">⬅ Volver</button>` : ''}
+      <span style="margin-left: 10px; font-weight: 500; font-family: monospace;">Drive > ${folderHistory.length > 0 ? 'Carpeta' : 'Inicio'}</span>
+    `;
+  }
   
   try {
     const res = await fetch(SUPABASE_URL + '/functions/v1/google-drive', {
