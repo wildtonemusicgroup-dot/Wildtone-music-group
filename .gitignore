@@ -16,3 +16,4 @@ node_modules/
 
 # Gemini/AI workspace
 .gemini/
+wildtone-operation-suite-*.json

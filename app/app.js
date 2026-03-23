@@ -170,6 +170,7 @@ const ROLE_CONFIG = {
     modules: [
       { id: 'dashboard', icon: '⊞', label: 'Master Dashboard' },
       { id: 'projects', icon: '◈', label: 'Proyectos' },
+      { id: 'docs', icon: '📁', label: 'Documentos' },
       { id: 'crm', icon: '◉', label: 'CRM Pipeline' },
       { id: 'demos', icon: '🎵', label: 'Demos Box' },
       { id: 'support', icon: '✉', label: 'Soporte', badge: '5', badgeClass: 'warn' },
@@ -189,6 +190,7 @@ const ROLE_CONFIG = {
     modules: [
       { id: 'dashboard', icon: '⊞', label: 'Mi Dashboard' },
       { id: 'projects', icon: '◈', label: 'Proyectos' },
+      { id: 'docs', icon: '📁', label: 'Documentos' },
       { id: 'crm', icon: '◉', label: 'CRM Pipeline' },
       { id: 'demos', icon: '🎵', label: 'Demos Box' },
       { id: 'support', icon: '✉', label: 'Soporte', badge: '5', badgeClass: 'warn' },
@@ -207,6 +209,7 @@ const ROLE_CONFIG = {
       { id: 'crm', icon: '◉', label: 'CRM Pipeline' },
       { id: 'demos', icon: '🎵', label: 'Demos Box' },
       { id: 'projects', icon: '◈', label: 'Proyectos' },
+      { id: 'docs', icon: '📁', label: 'Documentos' },
       { id: 'support', icon: '✉', label: 'Soporte', badge: '5', badgeClass: 'warn' },
       { id: 'time', icon: '◷', label: 'Horario' },
       { id: 'chat', icon: '💬', label: 'Chat Interno' },
@@ -222,6 +225,7 @@ const ROLE_CONFIG = {
       { id: 'support', icon: '✉', label: 'Tickets Soporte', badge: '5', badgeClass: 'warn' },
       { id: 'launches', icon: '🚀', label: 'Lanzamientos' },
       { id: 'projects', icon: '◈', label: 'Proyectos' },
+      { id: 'docs', icon: '📁', label: 'Documentos' },
       { id: 'time', icon: '◷', label: 'Horario' },
       { id: 'chat', icon: '💬', label: 'Chat Interno' },
       { id: 'agent', icon: '✦', label: 'Agente AI', badge: 'AI', badgeClass: 'ai' },
@@ -236,6 +240,7 @@ const ROLE_CONFIG = {
       { id: 'finance', icon: '$', label: 'Gastos', badge: '3', badgeClass: 'warn' },
       { id: 'royalties', icon: '♫', label: 'Royalties' },
       { id: 'reports', icon: '▤', label: 'Reportes' },
+      { id: 'docs', icon: '📁', label: 'Documentos' },
       { id: 'time', icon: '◷', label: 'Horario' },
       { id: 'chat', icon: '💬', label: 'Chat Interno' },
       { id: 'agent', icon: '✦', label: 'Agente AI', badge: 'AI', badgeClass: 'ai' },
@@ -308,7 +313,7 @@ function navigate(module) {
   if (nav) nav.classList.add('active');
 
   const labels = {
-    dashboard: 'Dashboard', projects: 'Proyectos',
+    dashboard: 'Dashboard', projects: 'Proyectos', docs: 'Documentos',
     crm: 'CRM Pipeline', demos: 'Demos Box', finance: 'Finanzas',
     royalties: 'Royalties', time: 'Horario',
     reports: 'Reportes', support: 'Soporte', launches: 'Lanzamientos',
@@ -318,7 +323,7 @@ function navigate(module) {
   state.currentModule = module;
 
   const renderers = {
-    dashboard: renderDashboard, projects: renderProjects,
+    dashboard: renderDashboard, projects: renderProjects, docs: renderDocs,
     crm: renderCRM, demos: renderDemos, finance: renderFinance,
     royalties: renderRoyalties, time: renderTime,
     reports: renderReports, support: renderSupport, launches: renderLaunches,
@@ -2500,6 +2505,155 @@ function renderRoyalties() {
     </div>
   `;
 }
+
+// ── Documentos (Google Drive) ────────────────────────────────
+let currentFolderId = 'root';
+let folderHistory = [];
+
+async function renderDocs() {
+  const el = document.getElementById('module-docs');
+  el.innerHTML = `
+    <div class="section-header">
+      <div>
+        <div class="section-title">📁 Documentos (Google Drive)</div>
+        <div class="section-sub">Archivos de Wildtone Music Group</div>
+      </div>
+      <div>
+        <input type="text" id="driveSearch" placeholder="Buscar archivos..." class="input" style="width: 200px; display: inline-block; margin-right: 10px;">
+        <button class="btn btn-primary" onclick="searchDrive()">🔍 Buscar</button>
+      </div>
+    </div>
+    
+    <div class="card" style="margin-bottom: 20px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+        <div>
+          ${folderHistory.length > 0 ? `<button class="btn btn-sm" onclick="goBackDriveFolder()">⬅ Volver</button>` : ''}
+          <span style="margin-left: 10px; font-weight: 500; font-family: monospace;">Drive > ${folderHistory.length > 0 ? 'Carpeta' : 'Inicio'}</span>
+        </div>
+        <button class="btn btn-sm btn-ghost" onclick="loadDriveFiles(currentFolderId)">↻ Recargar</button>
+      </div>
+      <div id="driveFilesContainer" style="min-height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div class="loader-spinner"></div>
+      </div>
+    </div>
+  `;
+  await loadDriveFiles(currentFolderId);
+}
+
+async function loadDriveFiles(folderId) {
+  const container = document.getElementById('driveFilesContainer');
+  if (container) container.innerHTML = '<div class="loader-spinner"></div>';
+  
+  try {
+    const res = await fetch(SUPABASE_URL + '/functions/v1/google-drive', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY },
+      body: JSON.stringify({ action: 'list', folderId })
+    });
+    
+    const data = await res.json();
+    if (data.error) throw new Error(data.message || data.error);
+    
+    renderDriveFileList(data.files || []);
+    currentFolderId = folderId;
+  } catch (err) {
+    if (err.message.includes('No configurado') || err.message.includes('not_configured')) {
+      if (container) container.innerHTML = `
+        <div style="text-align:center; padding: 40px;">
+          <h2 style="margin-bottom: 10px;">⚠️ Google Drive no configurado</h2>
+          <p style="color:var(--text-muted); margin-bottom: 20px;">Necesitamos configurar un Google Service Account para conectar el Drive de la empresa.</p>
+          <div style="text-align:left; background: var(--bg); padding: 20px; border-radius: 8px; max-width: 500px; margin: 0 auto;">
+            <strong>Pasos para configurar:</strong><br><br>
+            1. Crea un Service Account en Google Cloud<br>
+            2. Descarga el JSON de credenciales<br>
+            3. Dáselo al desarrollador para que lo agregue como 'GOOGLE_SERVICE_ACCOUNT_JSON' en Supabase Secrets<br>
+            4. Comparte las carpetas de Drive con el email del Service Account
+          </div>
+        </div>
+      `;
+    } else {
+      console.error(err);
+      if (container) container.innerHTML = `<div style="color:var(--red); padding: 20px;">Error al cargar archivos: ${err.message}</div>`;
+    }
+  }
+}
+
+async function searchDrive() {
+  const query = document.getElementById('driveSearch')?.value.trim();
+  if (!query) return loadDriveFiles(currentFolderId);
+  
+  const container = document.getElementById('driveFilesContainer');
+  if (container) container.innerHTML = '<div class="loader-spinner"></div>';
+  
+  try {
+    const res = await fetch(SUPABASE_URL + '/functions/v1/google-drive', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY },
+      body: JSON.stringify({ action: 'search', query })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.message || data.error);
+    renderDriveFileList(data.files || []);
+  } catch (err) {
+    if (container) container.innerHTML = `<div style="color:var(--red); padding: 20px;">Error en búsqueda: ${err.message}</div>`;
+  }
+}
+
+function renderDriveFileList(files) {
+  const container = document.getElementById('driveFilesContainer');
+  if (!container) return;
+  
+  if (files.length === 0) {
+    container.innerHTML = '<div style="color:var(--text-muted); padding: 30px;">Carpeta vacía o sin resultados.</div>';
+    return;
+  }
+  
+  container.innerHTML = `
+    <div class="table-wrap">
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr style="border-bottom: 1px solid var(--border); text-align: left;">
+            <th style="padding: 12px; width: 40px;"></th>
+            <th style="padding: 12px;">Nombre</th>
+            <th style="padding: 12px; text-align: right;">Tamaño</th>
+            <th style="padding: 12px;">Última modif.</th>
+            <th style="padding: 12px; text-align: right;">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${files.map(f => `
+            <tr style="border-bottom: 1px solid var(--border); hover: { background: var(--bg-hover) }">
+              <td style="padding: 12px; font-size: 20px; text-align: center;">${f.icon}</td>
+              <td style="padding: 12px;">
+                ${f.type === 'folder' 
+                  ? `<a href="#" onclick="openDriveFolder('${f.id}')" style="color:var(--text); text-decoration:none; font-weight:500;">${f.name}</a>`
+                  : `<a href="${f.link}" target="_blank" style="color:var(--text); text-decoration:none;">${f.name}</a>`
+                }
+              </td>
+              <td style="padding: 12px; color:var(--text-muted); text-align: right;">${f.size || '—'}</td>
+              <td style="padding: 12px; color:var(--text-muted);">${new Date(f.modified).toLocaleDateString()}</td>
+              <td style="padding: 12px; text-align: right;">
+                ${f.type !== 'folder' ? `<a href="${f.link}" target="_blank" class="btn btn-sm btn-ghost">Abrir ↗</a>` : `<button class="btn btn-sm" onclick="openDriveFolder('${f.id}')">Explorar</button>`}
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+window.openDriveFolder = function(id) {
+  folderHistory.push(currentFolderId);
+  loadDriveFiles(id);
+};
+
+window.goBackDriveFolder = function() {
+  if (folderHistory.length > 0) {
+    const prev = folderHistory.pop();
+    loadDriveFiles(prev);
+  }
+};
 
 // ── Init ─────────────────────────────────────────────────────
 async function initApp() {
